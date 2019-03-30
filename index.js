@@ -1,36 +1,27 @@
 // @format
 
-const http = require("http");
 const fs = require("fs");
-const path = require("path");
+const http = require("http");
 const marked = require("marked");
-
+const path = require("path");
 const renderPage = require("./src/render-page");
 
-const server = (request, response) => {
-  const ROUTES = [
-    createRoute({ path: "/", render: renderHome }),
-    createRoute({ path: "/articles/:slug", render: renderArticle }),
-    createRoute({ path: "/404", render: renderNotFound })
-  ];
+const ONLY_LETTERS_NUMBERS_OR_DASH = /^[a-zA-Z\d/-]+$/;
 
-  const isValidRoute = /^[\w\d/-]+$/.test(request.url);
+const server = (request, response) => {
+  const isValidRoute = ONLY_LETTERS_NUMBERS_OR_DASH.test(request.url);
   if (!isValidRoute) {
-    renderNotFound();
+    renderNotFound(response);
+    return;
   }
 
   const route = ROUTES.find(route => route.match(request.url));
   if (route == null) {
-    renderNotFound();
+    renderNotFound(response);
+    return;
   }
 
   route.render(response, request);
-};
-
-const createRoute = config => {
-  const regex = new RegExp("^" + config.path.replace(/:[\w\d]+/, "(.*)") + "$");
-
-  return { ...config, match: path => regex.test(path) };
 };
 
 const renderHome = response => {
@@ -83,6 +74,18 @@ const renderNotFound = response =>
 
 const renderError = response =>
   send(response, renderPage("error", "Server error"), 500);
+
+const createRoute = config => {
+  const regex = new RegExp("^" + config.path.replace(/:[\w\d]+/, "(.*)") + "$");
+
+  return { ...config, match: path => regex.test(path) };
+};
+
+const ROUTES = [
+  createRoute({ path: "/", render: renderHome }),
+  createRoute({ path: "/articles/:slug", render: renderArticle }),
+  createRoute({ path: "/404", render: renderNotFound })
+];
 
 const send = (response, content, statusCode = 200) => {
   response.writeHead(statusCode, { "Content-Type": "text/html" });

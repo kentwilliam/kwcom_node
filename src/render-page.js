@@ -8,19 +8,23 @@ const renderPage = (pageID, content) => `
     <head>
       <meta charset="utf-8">
       <title></title>
-      <link href="https://fonts.googleapis.com/css?family=Heebo:100,300,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Heebo:300,700|Cousine" rel="stylesheet">
       <style>
         ${renderStyle()}
       </style>
     </head>
     <body class="page-${pageID}">
-      <h1 id="logo">
-        ${pageID !== "home" ? '<a href="/">' : ""}
-          Kent William Innholt
-          <span>Field Notes</span>
-        ${pageID !== "home" ? "</a>" : ""}
-      </h1>
-      ${content}
+      <div id="content-background"></div>
+      <h1 id="logo"><a href="/">KW.</a></h1>
+      <div id="headshot"></div>
+      <nav id="menu">
+        <a href=""><strong>B</strong><span>log</span></a>
+        <a href=""><strong>R</strong><span>eviews</span></a>
+        <a href=""><strong>A</strong><span>rchive</span></a>
+      </nav>
+      <div id="content">
+        ${content}
+      </div>
     </body>
   </html>
 `;
