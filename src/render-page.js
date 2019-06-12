@@ -8,14 +8,14 @@ const renderPage = (pageID, content) => `
     <head>
       <meta charset="utf-8">
       <title></title>
-      <link href="https://fonts.googleapis.com/css?family=Heebo:300,700|Cousine" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Cousine|Playfair+Display:700|Source+Sans+Pro:300,700&display=swap" rel="stylesheet">
       <style>
         ${renderStyle()}
       </style>
     </head>
     <body class="page-${pageID}">
       <div id="content-background"></div>
-      <h1 id="logo"><a href="/">KW.</a></h1>
+      <h1 id="logo"><a href="/"><span>${renderLogo()}</span></a></h1>
       <div id="headshot"></div>
       <nav id="menu">
         <a href=""><strong>B</strong><span>log</span></a>
@@ -28,5 +28,11 @@ const renderPage = (pageID, content) => `
     </body>
   </html>
 `;
+
+const renderLogo = () => {
+  const symbols = ["&#9749", "&#9748", "&#9757", "&#9785", "&#9786"];
+
+  return symbols[Math.floor(Math.random() * symbols.length)];
+};
 
 module.exports = renderPage;

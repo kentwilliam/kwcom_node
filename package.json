@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "forever --watch --watchDirectory `pwd` --sourceDir `pwd` index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "marked": "^0.6.1"
+    "marked": "^0.6.2"
+  },
+  "devDependencies": {
+    "forever": "^1.0.0"
   }
 }

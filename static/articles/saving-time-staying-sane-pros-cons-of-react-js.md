@@ -2,8 +2,6 @@ published: 2014-07-21 23:01:09
 created: 2014-07-07 08:10:48
 updated: 2014-07-21 23:01:09
 
----
-
 # Saving Time & Staying Sane? Pros & Cons of React.js
 
 When I began working for [m›PATH](http://mpath.com) earlier this year, one of the exciting early tasks was putting together our new web app tech stack, which currently consists of Ruby/Sinatra, Sass/Autoprefixer, CoffeeScript—and [React.js](http://facebook.github.io/react/).
