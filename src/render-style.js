@@ -2,9 +2,9 @@
 
 const PALETTE = {
   logoBackground: "black",
-  logoBackgroundHover: "navy",
-  monoBackground: "#111616",
-  monoText: "#FFF6BF",
+  logoBackgroundHover: "#314157",
+  monoBackground: "#314157",
+  monoText: "#eee",
   linkText: "#9CC5FF",
   pageBackground: "#222626",
   text: "#ddd",
