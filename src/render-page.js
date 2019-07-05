@@ -14,7 +14,7 @@ const renderPage = (pageID, content) => `
     </head>
     <body class="page-${pageID}">
       <div id="content-background"></div>
-      <h1 id="logo"><a href="/"><span>${renderLogo()}</span></a></h1>
+      <h1 id="logo"><a href="/"><img src="/static/byline.jpg" /></a></h1>
       <div id="headshot"></div>
       <nav id="menu">
         <a href=""><strong>B</strong><span>log</span></a>
@@ -27,11 +27,5 @@ const renderPage = (pageID, content) => `
     </body>
   </html>
 `;
-
-const renderLogo = () => {
-  const symbols = ["&#9749", "&#9748", "&#9757", "&#9785", "&#9786"];
-
-  return symbols[Math.floor(Math.random() * symbols.length)];
-};
 
 module.exports = renderPage;

@@ -25,8 +25,9 @@ const CONTENT_FONT = `
 `;
 
 const HEADING_FONT = `
-  Big Caslon, 
   Baskerville, 
+  Garamond,
+  Georgia,
   sans-serif
 `;
 
@@ -68,32 +69,25 @@ const renderStyle = () => `
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
-    position: relative;
   }
     #logo a {
-      border-radius: 30px;
-      color: ${PALETTE.textAccent};
-      background: ${PALETTE.logoBackground};
-      text-decoration: none;
-      transition: .2s;
-      font-size: 100%;
-      height: 40px;
-      width: 40px;
-      position: absolute;
-      left: 0;
-      top: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+      float: left;
+      line-height: 0;
+      position: relative;
+      top: 50px;
     }
-      #logo a span {
-        position: relative;
-        top: -2px;
+      #logo a img {
+        height: 50px;
+        width: 50px;
+        border-radius: 0 50%;
+        transition: .2s;
       }
-      #logo a:hover {
-        background: ${PALETTE.logoBackgroundHover};
-      }
+        body:not(.page-home) #logo a:hover img {
+          opacity: .8;
+        }
+        body.page-home #logo a {
+          cursor: default;
+        }
   
   #menu {
     display: none;
@@ -148,6 +142,17 @@ const renderStyle = () => `
       padding: 0;
       margin: 0;
       background: none;
+    }
+
+  blockquote {
+    font-family: ${HEADING_FONT};
+    font-size: 110%;
+  }
+    blockquote p:first-of-type::before {
+      content: '“';
+    }
+    blockquote p:last-of-type::after {
+      content: '”';
     }
   
   #content img {

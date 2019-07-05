@@ -103,7 +103,7 @@ class Article {
         : ", " + publishedDate.getFullYear();
     const publishedString = `
       ${publishedDate.toLocaleString("en-us", { month: "long" })} 
-      ${publishedDate.getDay()}${year}
+      ${publishedDate.getDay() + 1}${year}
     `;
 
     const wordsPerMinute = 180;

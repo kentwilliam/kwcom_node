@@ -1,4 +1,4 @@
-title: Rich Drag-and-drop in React.js
+title: Rich Drag-and-Drop in React.js
 published: 2014-09-03 18:50:43
 created: 2014-07-21 21:32:52
 updated: 2014-09-03 19:04:22

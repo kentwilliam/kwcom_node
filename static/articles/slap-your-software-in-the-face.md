@@ -1,4 +1,4 @@
-title: Slap your software in the face
+title: Slap Your Software in the Face
 published: 2017-08-05 09:11:19
 created: 2017-06-18 01:07:06
 updated: 2017-08-05 09:14:32
