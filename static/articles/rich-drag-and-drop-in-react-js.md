@@ -15,17 +15,17 @@ In the following, I will go through some of the interesting details about the ap
 
 ## Problem overview
 
-[<img src=""http://imgur.com/JqKEzOI.png"" style=""width: 100%"">](http://codepen.io/kentwilliam/pen/xAKdj)
+![Problem overview. On the left, six source objects, numbered 1 through 6, 1–3 being green and 4–6 being blue. An the right, four destination slots, one which accepts blue draggables, one which accepts green, one which accepts both colors, and one which accepts no colors](/static/rich-drag-and-drop-in-react-js/JqKEzOI.png)
 
 For this example, our rules will be simple: We have green and blue `SourceObjects`, and we have `DropTargets` that accept blues, greens, both, or none.
 
-[<img src=""http://imgur.com/uCHclsV.png"" style=""width: 100%"">](http://codepen.io/kentwilliam/pen/xAKdj)
+![User has started to drag green item 3. The slots which accept green have been highlighted, and the slots which do not accept green have been reduced in opacity.](/static/rich-drag-and-drop-in-react-js/uCHclsV.png)
 
 As a drag starts, the dragged item is removed from the list and the cursor changes. The valid `DropTargets` are given a highlight treatment and the invalid ones get toned down. This helps the user by visualizing the otherwise unseen rules about which drags are allowed.
 
 (Well, in this case I guess the rules are visible already—in many real-world cases they will not be as clear-cut as this, and we might not be able to color code them all.)
 
-[<img src=""http://imgur.com/IBNhXuV.png"" style=""width: 100%"">](http://codepen.io/kentwilliam/pen/xAKdj)
+![User has dragged the green item 3 over the second destination slot, which has turned green itself to indicate the result of the drag will be that the slot will have been 'filled' with green item 3.](/static/rich-drag-and-drop-in-react-js/IBNhXuV.png)
 
 Once the drag is over a valid `DropTarget`, we update the target again to show what a drop here would result in. This helps the user determine if the effect is as intended, saving her from having to undo something unintended.
 

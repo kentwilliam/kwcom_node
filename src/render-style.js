@@ -3,9 +3,11 @@
 const PALETTE = {
   logoBackground: "black",
   logoBackgroundHover: "navy",
-  monoBackground: "#343B3B",
+  monoBackground: "#111616",
+  monoText: "#FFF6BF",
+  linkText: "#9CC5FF",
   pageBackground: "#222626",
-  text: "#ccc",
+  text: "#ddd",
   textAccent: "white"
 };
 
@@ -40,7 +42,7 @@ const renderStyle = () => `
     font-family: ${CONTENT_FONT};
     background-color: ${PALETTE.pageBackground};
     color: ${PALETTE.text};
-    font-size: 17px;
+    font-size: 16px;
     margin: 0;
     display: grid;
     grid-template-columns: 40px 1fr minmax(12em, 36em) 1fr 40px; 
@@ -73,7 +75,7 @@ const renderStyle = () => `
       color: ${PALETTE.textAccent};
       background: ${PALETTE.logoBackground};
       text-decoration: none;
-      transition: .4s;
+      transition: .2s;
       font-size: 100%;
       height: 40px;
       width: 40px;
@@ -101,7 +103,7 @@ const renderStyle = () => `
     grid-column-start: 4;
     grid-column-end: -4;
     grid-row-start: 3;
-    grid-row-end; -2;
+    grid-row-end: -2;
     transition: .2s;
     padding-bottom: 3em;
     font-weight: 300;
@@ -109,7 +111,7 @@ const renderStyle = () => `
 
   p, blockquote, pre, li {
     max-width: 36em;
-    line-height: 1.7em;
+    line-height: 1.8em;
   }
 
   li {
@@ -125,13 +127,16 @@ const renderStyle = () => `
 
   pre, code {
     font-family: ${MONOSPACE_FONT};
-    font-size: 15px;
+    font-size: 14px;
     background: ${PALETTE.monoBackground};
+    color: ${PALETTE.monoText}
   }
     pre {
-      padding: 1.3em 1.7em; 
+      padding: 1.2em 1.2em 1.5em; 
       border-radius: .3em;
       margin: 2em 0;
+      min-width: 36em;
+      max-width: 80em;
     }
     code {
       padding: .2em .4em;
@@ -144,16 +149,17 @@ const renderStyle = () => `
       margin: 0;
       background: none;
     }
+  
+  #content img {
+    max-width: 100%;
+  }
 
   #content a {
-    color: ${PALETTE.text};
-    text-decoration: none;
-    box-shadow: inset 0 -1px 0 ${PALETTE.text};
-    transition: .3s;
+    color: ${PALETTE.linkText};
+    transition: .2s;
   }
     #content a:hover {
-      color: ${PALETTE.textAccent};
-      box-shadow: inset 0 -1px 0 ${PALETTE.textAccent};
+      box-shadow: inset 0 -1px 0 ${PALETTE.linkText};
     }
 
   #content h1, h2, h3 {
@@ -171,7 +177,7 @@ const renderStyle = () => `
 
   #content h1 {
     position: relative;
-    padding: .5em 30px .7em;
+    padding: .5em 30px .6em;
     font-family: ${HEADING_FONT};
     font-size: 240%;
     font-weight: 300;
@@ -205,6 +211,13 @@ const renderStyle = () => `
     font-size: 160%;
     padding: .5em 30px .4em;
   }
+
+  .page-home #content a h1 {
+    color: ${PALETTE.text};
+  }
+    .page-home #content a:hover h1 {
+      color: ${PALETTE.textAccent};
+    }
 `;
 
 module.exports = renderStyle;

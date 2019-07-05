@@ -6,7 +6,8 @@ const marked = require("marked");
 const path = require("path");
 const renderPage = require("./src/render-page");
 
-const VALID_ROUTE = /^[a-zA-Z\d/-]+$/;
+// Alphas, numbers, slash, and dash, plus an optional three-letter extension
+const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z]{3})?$/;
 
 const server = (request, response) => {
   if (request.method !== "GET") {
@@ -60,6 +61,7 @@ const renderHome = response => {
             "home",
             articles
               .map(([filePath, markdown]) => new Article(filePath, markdown))
+              .sort((a, b) => (a.published > b.published ? -1 : 1))
               .map(
                 article => `
                 <article>
@@ -153,8 +155,38 @@ const renderNotFound = response =>
 const renderError = response =>
   send(response, renderPage("error", "Server error"), 500);
 
+const MIME_TYPES = {
+  png: "image/png",
+  jpg: "image/jpg",
+  gif: "image/gif"
+};
+
 const renderStatic = (response, request) => {
-  send(response, "test", 200);
+  const requestPath = request.url
+    .toString()
+    .split("?")[0]
+    .replace("/static", "");
+
+  if (requestPath.endsWith("/") || requestPath.includes("..")) {
+    renderError(response);
+    return;
+  }
+
+  const directory = process.env.PWD;
+  const file = path.join(directory, "static", "resources", requestPath);
+  const mimeType = MIME_TYPES[path.extname(file).slice(1)];
+
+  if (mimeType == null) {
+    renderError(response);
+    return;
+  }
+
+  const stream = fs.createReadStream(file);
+  stream.on("open", () => {
+    response.setHeader("Content-Type", mimeType);
+    stream.pipe(response);
+  });
+  stream.on("error", () => renderError(response));
 };
 
 const createRoute = config => {
