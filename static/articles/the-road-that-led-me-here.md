@@ -1,14 +1,15 @@
+title: The road that led me here
 published: 2014-06-30 09:46:41
 created: 2014-06-30 09:22:44
 updated: 2014-07-21 22:49:11
 
-# The road that led me here
+~
 
 In the near future, this will hopefully become a useful repository for thoughts on interaction design and web engineering.
 
 However, before we can get started, here's a quick bit about who I am.
 
-In brief, I'm into UX, web technologies and videogames—in no particular order. 
+In brief, I'm into UX, web technologies and videogames—in no particular order.
 
 Currently I'm enjoying my work at [m›PATH](http://www.mpath.com) exploring a React.js/CoffeeScript and Ruby/Sinatra tech stack as well as a host of complex UX problems.
 
