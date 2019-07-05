@@ -9,18 +9,31 @@ const PALETTE = {
   textAccent: "white"
 };
 
-const MONOSPACE = `
-  "SFMono-Regular",
-  Consolas,
-  "Liberation Mono",
-  Menlo,
-  Courier,
-  monospace
+const CONTENT_FONT = `
+  -apple-system, 
+  BlinkMacSystemFont, 
+  "Segoe UI", 
+  Roboto, 
+  Helvetica, 
+  Arial, 
+  sans-serif, 
+  "Apple Color Emoji", 
+  "Segoe UI Emoji", 
+  "Segoe UI Symbol"
 `;
 
-const CONTENT_FONT = `'Source Sans Pro', sans-serif`;
+const HEADING_FONT = `
+  Big Caslon, 
+  Baskerville, 
+  sans-serif
+`;
 
-const HEADING_FONT = `'Playfair Display', serif`;
+const MONOSPACE_FONT = `
+  "SFMono-Regular",
+  "Liberation Mono",
+  Menlo,
+  monospace
+`;
 
 const renderStyle = () => `
   body {
@@ -34,6 +47,11 @@ const renderStyle = () => `
     grid-template-rows: 120px 40px auto 70px;
     align-items: stretch;
     justify-items: stretch;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 
   #content-background {
@@ -106,7 +124,7 @@ const renderStyle = () => `
     }
 
   pre, code {
-    font-family: "Cousine", monospace;
+    font-family: ${MONOSPACE_FONT};
     font-size: 15px;
     background: ${PALETTE.monoBackground};
   }
@@ -140,7 +158,6 @@ const renderStyle = () => `
 
   #content h1, h2, h3 {
     margin: 0;
-    font-weight: 400;
     line-height: inherit;
   }
     #content h1 a, #content h2 a, #content h3 a {
@@ -154,18 +171,39 @@ const renderStyle = () => `
 
   #content h1 {
     position: relative;
-    padding: 15px 0 23px;
-    font-size: 240%;
+    padding: .5em 30px .7em;
     font-family: ${HEADING_FONT};
-    font-weight: 700;
+    font-size: 240%;
+    font-weight: 300;
+    text-align: center;
   }
   
   #content h2 {
-    padding: 1.6em 0 0;
-    font-size: 100%;
     font-family: ${CONTENT_FONT};
+    font-size: 90%;
+    font-weight: 500;
+    padding: 1.6em 0 0;
+    text-align: center;
     text-transform: uppercase;
-    font-weight: 700;
+  }
+
+  #content .metadata {
+    text-transform: uppercase;
+    font-size: 70%;
+    padding: 0 0 2.2em;
+    display: block;
+    color: #888;
+    text-align: center;
+    letter-spacing: .1em;
+  }
+    #content .metadata > *:not(:last-child):after {
+      content: '\u00B7';
+      margin: 0 .2em;
+    }
+
+  .page-home #content h1 {
+    font-size: 160%;
+    padding: .5em 30px .4em;
   }
 `;
 

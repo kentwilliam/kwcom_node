@@ -8,7 +8,6 @@ const renderPage = (pageID, content) => `
     <head>
       <meta charset="utf-8">
       <title></title>
-      <link href="https://fonts.googleapis.com/css?family=Cousine|Playfair+Display:700|Source+Sans+Pro:300,700&display=swap" rel="stylesheet">
       <style>
         ${renderStyle()}
       </style>
