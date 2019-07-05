@@ -172,7 +172,7 @@ const renderStyle = () => `
       box-shadow: none;
     }
       #content h1 a:hover, #content h2 a:hover, #content h3 a:hover {
-        color: ${PALETTE.textAccent};
+        color: ${PALETTE.linkText};
       }
 
   #content h1 {
@@ -185,12 +185,14 @@ const renderStyle = () => `
   }
   
   #content h2 {
-    font-family: ${CONTENT_FONT};
+    font-family: ${HEADING_FONT};
     font-size: 90%;
     font-weight: 500;
-    padding: 1.6em 0 0;
+    letter-spacing: .05em;
+    padding: 1.6em 15% 0;
     text-align: center;
     text-transform: uppercase;
+    line-height: 1.8em;
   }
 
   #content .metadata {
