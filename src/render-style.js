@@ -6,7 +6,7 @@ const PALETTE = {
   monoBackground: "#314157",
   monoText: "#eee",
   linkText: "#9CC5FF",
-  pageBackground: "#222626",
+  pageBackground: "#001122",//"#222626",
   text: "#ddd",
   textAccent: "white"
 };
@@ -14,7 +14,7 @@ const PALETTE = {
 const CONTENT_FONT = `
   -apple-system, 
   BlinkMacSystemFont, 
-  "Segoe UI", 
+  "Neue Haas Grotesk Display",
   Roboto, 
   Helvetica, 
   Arial, 
@@ -24,12 +24,7 @@ const CONTENT_FONT = `
   "Segoe UI Symbol"
 `;
 
-const HEADING_FONT = `
-  Baskerville, 
-  Garamond,
-  Georgia,
-  sans-serif
-`;
+const HEADING_FONT = CONTENT_FONT;
 
 const MONOSPACE_FONT = `
   "SFMono-Regular",
@@ -50,6 +45,7 @@ const renderStyle = () => `
     grid-template-rows: 120px 40px auto 70px;
     align-items: stretch;
     justify-items: stretch;
+    padding-left: calc(100vw - 100%);
   }
 
   a {
@@ -100,7 +96,7 @@ const renderStyle = () => `
     grid-row-end: -2;
     transition: .2s;
     padding-bottom: 3em;
-    font-weight: 300;
+    /*font-weight: normal;*/
   }
 
   p, blockquote, pre, li {
@@ -170,6 +166,7 @@ const renderStyle = () => `
   #content h1, h2, h3 {
     margin: 0;
     line-height: inherit;
+    font-weight: 600;
   }
     #content h1 a, #content h2 a, #content h3 a {
       font-weight: inherit;
@@ -184,15 +181,16 @@ const renderStyle = () => `
     position: relative;
     padding: .5em 30px .6em;
     font-family: ${HEADING_FONT};
-    font-size: 240%;
-    font-weight: 300;
+    font-size: 210%;
+    font-weight: 600;
     text-align: center;
+    color: ${PALETTE.textAccent};
   }
   
   #content h2 {
     font-family: ${HEADING_FONT};
     font-size: 90%;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: .05em;
     padding: 1.6em 15% 0;
     text-align: center;
