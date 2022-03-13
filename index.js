@@ -3,11 +3,16 @@
 const fs = require("fs");
 const http = require("http");
 const marked = require("marked");
+const memory_cache = require('memory-cache');
 const path = require("path");
 const renderPage = require("./src/render-page");
 
 // Alphas, numbers, slash, and dash, plus an optional three-letter extension
 const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z]{3})?$/;
+
+const ONE_MINUTE = 60 * 1000; /* ms */
+
+const CACHE_TIMEOUT = ONE_MINUTE;
 
 const server = (request, response) => {
   if (request.method !== "GET") {
@@ -16,10 +21,18 @@ const server = (request, response) => {
     response.end("Method not implemented");
     return;
   }
+  
+  response.setHeader('Cache-control', 'public, max-age=300');
 
   const isValidRoute = VALID_ROUTE.test(request.url);
   if (!isValidRoute) {
     renderNotFound(response);
+    return;
+  }
+
+  const cachedContent = memory_cache.get(request.url);
+  if (cachedContent != null) {
+    send(response, cachedContent);
     return;
   }
 
@@ -39,7 +52,7 @@ const readMarkdownFile = filePath =>
     );
   });
 
-const renderHome = response => {
+const renderHome = (response, request) => {
   fs.readdir("static/articles", (error, files) => {
     if (error) {
       console.log({ error });
@@ -55,32 +68,34 @@ const renderHome = response => {
       fileNames.map(file => readMarkdownFile(file))
     )
       .then(articles => {
-        send(
-          response,
-          renderPage(
-            "home",
-            articles
-              .map(([filePath, markdown]) => new Article(filePath, markdown))
-              .sort((a, b) => (a.published > b.published ? -1 : 1))
-              .map(
-                article => `
-                <article>
-                  <a href="${article.url}">
-                    <h1>${article.title}</h1>
-                    <div class="metadata">
-                      <time datetime=${article.published}>
-                        ${article.publishedString}
-                      </time>
-                    </div>
-                  </a>
-                </article>
-              `
-              )
-              .join("")
-          )
+        const pageContent = renderPage(
+          "home",
+          articles
+            .map(([filePath, markdown]) => new Article(filePath, markdown))
+            .filter(article => new Date(article.published).getFullYear() > 2020)
+            .sort((a, b) => (a.published > b.published ? -1 : 1))
+            .map(
+              article => `
+              <article>
+                <a href="${article.url}">
+                  <h1>${article.title}</h1>
+                  <div class="metadata">
+                    <time datetime=${article.published}>
+                      ${article.publishedString}
+                    </time>
+                  </div>
+                </a>
+              </article>
+            `
+            )
+            .join("")
         );
+
+        memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
+
+        send(response, pageContent, 200);
       })
-      .catch(error => renderError(response));
+      .catch(error => console.log({error})  || renderError(response));
   });
 };
 
@@ -92,7 +107,7 @@ class Article {
       .map(item => item.replace(/^[^:]+:\s?/, ""));
 
     // Text starts after the first ~ sign
-    const text = marked(markdown.replace(/^[^~]+/, "").slice(1));
+    const text = marked.parse(markdown.replace(/^[^~]+/, "").slice(1));
 
     // Current-year dates show without year, others show with year
     const publishedDate = new Date(published);
@@ -103,7 +118,7 @@ class Article {
         : ", " + publishedDate.getFullYear();
     const publishedString = `
       ${publishedDate.toLocaleString("en-us", { month: "long" })} 
-      ${publishedDate.getDay() + 1}${year}
+      ${publishedDate.getDate()}${year}
     `;
 
     const wordsPerMinute = 180;
@@ -127,13 +142,13 @@ const renderArticle = (response, request) => {
   fs.readFile(filePath, { encoding: "utf-8" }, (error, markdown) => {
     if (error) {
       console.log({ error });
-      renderError(response);
+      renderNotFound(response);
       return;
     }
 
     const article = new Article(filePath, markdown);
 
-    const content = renderPage(
+    const pageContent = renderPage(
       "article",
       `
         <h1>${article.title}</h1>
@@ -145,7 +160,9 @@ const renderArticle = (response, request) => {
       `
     );
 
-    send(response, content, 200);
+        memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
+
+    send(response, pageContent, 200);
   });
 };
 
@@ -209,4 +226,4 @@ const send = (response, content, statusCode = 200) => {
 
 http.createServer(server).listen(8125);
 
-console.log("Server running at http://127.0.0.1:8125/");
+console.log("Server running at http://localhost:8125/");

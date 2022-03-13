@@ -3,28 +3,36 @@
 const PALETTE = {
   logoBackground: "black",
   logoBackgroundHover: "#314157",
-  monoBackground: "#314157",
-  monoText: "#eee",
-  linkText: "#9CC5FF",
-  pageBackground: "#001122",//"#222626",
-  text: "#ddd",
-  textAccent: "white"
+  metadata: "#555",
+  monoText: "#314157",
+  monoBackground: "#eee",
+  linkText: "#E64E3B",//"#5147FF",//white",//#9CC5FF",
+  text: "#221100",//001122",//"#222626",
+  pageBackground: "#ddd",
+  textAccent: "#222",//222"//white"
 };
 
 const CONTENT_FONT = `
-  -apple-system, 
-  BlinkMacSystemFont, 
+  -apple-system,
+  BlinkMacSystemFont,
   "Neue Haas Grotesk Display",
-  Roboto, 
-  Helvetica, 
-  Arial, 
-  sans-serif, 
-  "Apple Color Emoji", 
-  "Segoe UI Emoji", 
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif,
+  "Apple Color Emoji",
+  "Segoe UI Emoji",
   "Segoe UI Symbol"
 `;
 
 const HEADING_FONT = CONTENT_FONT;
+
+const QUOTE_FONT = `
+  Baskerville,
+  Garamond,
+  Georgia,
+  sans-serif
+`;
 
 const MONOSPACE_FONT = `
   "SFMono-Regular",
@@ -41,11 +49,13 @@ const renderStyle = () => `
     font-size: 16px;
     margin: 0;
     display: grid;
-    grid-template-columns: 40px 1fr minmax(12em, 36em) 1fr 40px; 
-    grid-template-rows: 120px 40px auto 70px;
+    grid-template-columns: 40px 1fr minmax(12em, 36em) 1fr 40px;
+    grid-template-rows: 136px 40px auto 70px;
     align-items: stretch;
     justify-items: stretch;
     padding-left: calc(100vw - 100%);
+    box-shadow: inset 0 0 0 16px white;
+    min-height: 100vh;
   }
 
   a {
@@ -70,7 +80,7 @@ const renderStyle = () => `
       float: left;
       line-height: 0;
       position: relative;
-      top: 50px;
+      top: 66px;
     }
       #logo a img {
         height: 50px;
@@ -84,10 +94,10 @@ const renderStyle = () => `
         body.page-home #logo a {
           cursor: default;
         }
-  
+
   #menu {
     display: none;
-  }    
+  }
 
   #content {
     grid-column-start: 4;
@@ -96,7 +106,6 @@ const renderStyle = () => `
     grid-row-end: -2;
     transition: .2s;
     padding-bottom: 3em;
-    /*font-weight: normal;*/
   }
 
   p, blockquote, pre, li {
@@ -122,7 +131,7 @@ const renderStyle = () => `
     color: ${PALETTE.monoText}
   }
     pre {
-      padding: 1.2em 1.2em 1.5em; 
+      padding: 1.2em 1.2em 1.5em;
       border-radius: .3em;
       margin: 2em 0;
       min-width: 36em;
@@ -141,8 +150,8 @@ const renderStyle = () => `
     }
 
   blockquote {
-    font-family: ${HEADING_FONT};
-    font-size: 110%;
+    font-family: ${QUOTE_FONT};
+    font-style: italic;
   }
     blockquote p:first-of-type::before {
       content: '“';
@@ -150,7 +159,7 @@ const renderStyle = () => `
     blockquote p:last-of-type::after {
       content: '”';
     }
-  
+
   #content img {
     max-width: 100%;
   }
@@ -158,9 +167,10 @@ const renderStyle = () => `
   #content a {
     color: ${PALETTE.linkText};
     transition: .2s;
+    box-shadow: inset 0 -1px 0 ${PALETTE.linkText};
   }
     #content a:hover {
-      box-shadow: inset 0 -1px 0 ${PALETTE.linkText};
+      opacity: 0.5;
     }
 
   #content h1, h2, h3 {
@@ -179,21 +189,21 @@ const renderStyle = () => `
 
   #content h1 {
     position: relative;
-    padding: .5em 30px .6em;
+    padding: .5em 0 .6em; /*30px .6em;*/
     font-family: ${HEADING_FONT};
     font-size: 210%;
     font-weight: 600;
-    text-align: center;
+    /*text-align: center;*/
     color: ${PALETTE.textAccent};
   }
-  
+
   #content h2 {
     font-family: ${HEADING_FONT};
     font-size: 90%;
     font-weight: 600;
     letter-spacing: .05em;
-    padding: 1.6em 15% 0;
-    text-align: center;
+    padding: 1.6em 0 0; /* 15% */
+    /*text-align: center;*/
     text-transform: uppercase;
     line-height: 1.8em;
   }
@@ -203,8 +213,8 @@ const renderStyle = () => `
     font-size: 70%;
     padding: 0 0 2.2em;
     display: block;
-    color: #888;
-    text-align: center;
+    color: ${PALETTE.metadata};
+    /*text-align: center;*/
     letter-spacing: .1em;
   }
     #content .metadata > *:not(:last-child):after {
@@ -213,15 +223,15 @@ const renderStyle = () => `
     }
 
   .page-home #content h1 {
-    font-size: 160%;
-    padding: .5em 30px .4em;
+    font-size: 100%;
+    padding: .5em 0 .4em;
   }
 
   .page-home #content a h1 {
     color: ${PALETTE.text};
   }
     .page-home #content a:hover h1 {
-      color: ${PALETTE.textAccent};
+      opacity: 0.5;
     }
 `;
 
