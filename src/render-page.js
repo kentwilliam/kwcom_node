@@ -11,6 +11,7 @@ const renderPage = (pageID, content) => `
       <style>
         ${renderStyle()}
       </style>
+      <script src="/static/client.js" async defer></script>
     </head>
     <body class="page-${pageID}">
       <div id="content-background"></div>

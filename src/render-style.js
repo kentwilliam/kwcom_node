@@ -6,10 +6,10 @@ const PALETTE = {
   metadata: "#555",
   monoText: "#314157",
   monoBackground: "#eee",
-  linkText: "#E64E3B",//"#5147FF",//white",//#9CC5FF",
-  text: "#221100",//001122",//"#222626",
+  linkText: "#E64E3B", //"#5147FF",//white",//#9CC5FF",
+  text: "#221100", //001122",//"#222626",
   pageBackground: "#ddd",
-  textAccent: "#222",//222"//white"
+  textAccent: "#222", //222"//white"
 };
 
 const CONTENT_FONT = `
@@ -42,9 +42,12 @@ const MONOSPACE_FONT = `
 `;
 
 const renderStyle = () => `
+  * {
+    /*box-shadow: inset 0 0 0 1px red;*/
+  }
   body {
     font-family: ${CONTENT_FONT};
-    background-color: ${PALETTE.pageBackground};
+    /*background-color: ${PALETTE.pageBackground};*/
     color: ${PALETTE.text};
     font-size: 16px;
     margin: 0;
@@ -223,7 +226,7 @@ const renderStyle = () => `
     }
 
   .page-home #content h1 {
-    font-size: 100%;
+    font-size: 120%;
     padding: .5em 0 .4em;
   }
 
