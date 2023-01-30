@@ -11,21 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "marked": "^0.7.0"
-  },
-  "devDependencies": {
-    "forever": "^1.0.0"
-=======
     "marked": "^4.0.12",
     "memory-cache": "^0.2.0"
-<<<<<<< HEAD
->>>>>>> a5d9e32 (messiness)
-=======
   },
   "devDependencies": {
     "nodemon": "^2.0.19",
     "prettier": "2.7.1"
->>>>>>> bd1ce99 (various)
   }
 }

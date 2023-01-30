@@ -54,7 +54,7 @@ const readMarkdownFile = (filePath) =>
   });
 
 const renderHome = (response, request) => {
-  fs.readdir("static/articles", (error, files) => {
+  fs.readdir("static/notes", (error, files) => {
     if (error) {
       console.log({ error });
       renderError(response);
@@ -63,36 +63,34 @@ const renderHome = (response, request) => {
 
     const fileNames = files
       .filter((file) => file.endsWith(".md"))
-      .map((file) => `static/articles/${file}`);
+      .map((file) => `static/notes/${file}`);
 
     const filesContent = Promise.all(
       fileNames.map((file) => readMarkdownFile(file))
     )
-      .then((articles) => {
-        const pageContent = renderPage(
-          "home",
-          articles
-            .map(([filePath, markdown]) => new Article(filePath, markdown))
-            .filter(
-              (article) => new Date(article.published).getFullYear() > 2020
-            )
-            .sort((a, b) => (a.published > b.published ? -1 : 1))
-            .map(
-              (article) => `
-              <article>
-                <a href="${article.url}">
-                  <h1>${article.title}</h1>
-                  <div class="metadata">
-                    <time datetime=${article.published}>
-                      ${article.publishedString}
-                    </time>
-                  </div>
-                </a>
-              </article>
-            `
-            )
-            .join("")
-        );
+      .then((notes) => {
+        const enabledSections = {
+          Notes: (note) => new Date(note.published).getFullYear() > 2022,
+          Archive: (note) => new Date(note.published).getFullYear() <= 2022,
+        };
+
+        const sections = `
+          <nav id="sections">
+            ${["Notes", "Reading", "Playing", "Listening to", "Work", "Archive"]
+              .map(
+                (section) =>
+                  `<h2 class="${
+                    enabledSections[section] == null ? "disabled" : ""
+                  }">${section}</h2>${
+                    enabledSections[section] != null
+                      ? renderNotes(notes, enabledSections[section])
+                      : ""
+                  }`
+              )
+              .join("")}
+          </nav>`;
+
+        const pageContent = renderPage("home", sections);
 
         memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
 
@@ -102,7 +100,25 @@ const renderHome = (response, request) => {
   });
 };
 
-class Article {
+const renderNotes = (notes, filter) =>
+  `${notes
+    .map(([filePath, markdown]) => new Note(filePath, markdown))
+    .filter(filter)
+    .sort((a, b) => (a.published > b.published ? -1 : 1))
+    .map(
+      (note) => `
+        <a href="${note.url}" class="note">
+          ${note.title}
+          <div class="metadata">
+            <time datetime=${note.published}>${note.publishedString}</time>
+            <span>${note.readTimeInMinutes} min read</span>
+          </div>
+        </a>
+            `
+    )
+    .join("")}`;
+
+class Note {
   constructor(filePath, markdown) {
     const [title, published] = markdown
       .split("\n")
@@ -139,7 +155,7 @@ class Article {
   }
 }
 
-const renderArticle = (response, request) => {
+const renderNote = (response, request) => {
   const filePath = `static${request.url}.md`;
 
   fs.readFile(filePath, { encoding: "utf-8" }, (error, markdown) => {
@@ -149,17 +165,17 @@ const renderArticle = (response, request) => {
       return;
     }
 
-    const article = new Article(filePath, markdown);
+    const note = new Note(filePath, markdown);
 
     const pageContent = renderPage(
-      "article",
+      "note",
       `
-        <h1>${article.title}</h1>
+        <h1>${note.title}</h1>
         <div class="metadata">
-          <time datetime=${article.published}>${article.publishedString}</time>
-          <span>${article.readTimeInMinutes} min read</span>
+          <time datetime=${note.published}>${note.publishedString}</time>
+          <span>${note.readTimeInMinutes} min read</span>
         </div>
-        ${article.text}
+        ${note.text}
       `
     );
 
@@ -219,7 +235,7 @@ const createRoute = (config) => {
 
 const ROUTES = [
   createRoute({ path: "/", render: renderHome }),
-  createRoute({ path: "/articles/:slug", render: renderArticle }),
+  createRoute({ path: "/notes/:slug", render: renderNote }),
   createRoute({ path: "/404", render: renderNotFound }),
   createRoute({ path: "/static/:file", render: renderStatic }),
 ];
