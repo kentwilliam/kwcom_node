@@ -5,8 +5,8 @@ const memory_cache = require("memory-cache");
 const path = require("path");
 const renderPage = require("./src/render-page");
 
-// Alphas, numbers, slash, and dash, plus an optional three-letter extension
-const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z]{2,3})?$/;
+// Alphas, numbers, slash, and dash, plus an optional extension
+const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,5})?$/;
 
 const ONE_MINUTE = 60 * 1000; /* ms */
 
@@ -107,14 +107,16 @@ const renderNotes = (notes, filter) =>
     .sort((a, b) => (a.published > b.published ? -1 : 1))
     .map(
       (note) => `
-        <a href="${note.url}" class="note">
-          ${note.title}
+        <li class="note">
+          <a href="${note.url}">
+            ${note.title}
+          </a>
           <div class="metadata">
             <time datetime=${note.published}>${note.publishedString}</time>
             <span>${note.readTimeInMinutes} min read</span>
           </div>
-        </a>
-            `
+        </li>
+      `
     )
     .join("")}`;
 
@@ -196,6 +198,7 @@ const MIME_TYPES = {
   jpg: "image/jpg",
   gif: "image/gif",
   js: "text/javascript",
+  woff2: "font/woff2",
 };
 
 const renderStatic = (response, request) => {

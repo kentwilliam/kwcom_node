@@ -8,13 +8,11 @@ const PALETTE = {
   monoBackground: "#eee",
   linkText: "#07a",
   linkTextHover: "#2abfff",
-  text: "#221100", 
+  text: "#221100",
   textAccent: "#222",
 };
 
 const CONTENT_FONT = `
-  "Nimbus Sans", 
-  Helvetica, 
   sans-serif
 `;
 
@@ -29,6 +27,25 @@ const renderStyle = () => `
 
 /* General */
 
+  @font-face {
+    font-family: 'Anderson Grotesk';
+    font-style: normal;
+    font-weight: normal;
+    src: url('/static/anderson-grotesk-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Anderson Grotesk';
+    font-style: normal;
+    font-weight: bold;
+    src: url('/static/anderson-grotesk-ultrabold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Anderson Grotesk';
+    font-style: italic;
+    font-weight: normal;
+    src: url('/static/anderson-grotesk-oblique.woff2') format('woff2');
+  }
+
   body {
     align-items: stretch;
     background-color: ${PALETTE.backgroundColor};
@@ -41,7 +58,17 @@ const renderStyle = () => `
     justify-items: stretch;
     line-height: 1.5;
     margin: 0;
+    overflow-y: scroll;
   }
+    body:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: white;
+    }
 
     #content {
       grid-column-start: 4;
@@ -52,10 +79,6 @@ const renderStyle = () => `
       padding-bottom: 3rem;
     }
 
-  p, blockquote, pre, li {
-    hyphens: auto;
-  }
-
   p, blockquote, pre, ol, ul, .metadata {
     margin: 0 0 1.4rem;
     padding: 0;
@@ -64,6 +87,10 @@ const renderStyle = () => `
   ol, ul {
     margin-left: 2rem;
   }
+
+  li {
+    list-style-type: none;
+  } 
 
   a {
     text-decoration: none;
@@ -86,6 +113,7 @@ const renderStyle = () => `
 /* Header */
 
   #header {
+    position: relative;
     display: flex;
     grid-column-end: 4;
     grid-column-start: 3;
@@ -104,33 +132,22 @@ const renderStyle = () => `
       font-size: 0.95rem;
       margin: 0;
       font-weight: bold;
-      padding: 1rem; 
+      padding: 1rem 1.6rem; 
       box-sizing: border-box;
-      margin-top: 0.3rem;
     }
 
   #logo {
     background-color: #c33800;
     border-radius: 0 0 6px 6px;
-    box-shadow: 0 -10px 0 0 #a62f00;
+    box-shadow: inset 0 4px 0 0 #a62f00;
     position: relative;
   }
 
     #logo h1 {
       color: white;
-    }
-
-    body:not(.page-home) #logo:hover {
-      opacity: .8;
-    }
-
-    body.page-home #logo:hover {
-      cursor: default;
-    }
-
-    #logo h1 {
       display: inline-block;
-      font-size: inherit;
+      font-size: 1rem;
+      letter-spacing: 0.3ch;
       padding: 0;
       margin: 0;
       transition: 0.15s all ease-out;
@@ -141,10 +158,19 @@ const renderStyle = () => `
         margin-left: 0;
       }
 
+      body:not(.page-home) #logo:hover {
+        opacity: .8;
+      }
+
+      body.page-home #logo:hover {
+        cursor: default;
+      }
+
+
     #logo::before {
       color: white;
       content: '\u00ab';
-      left: 1rem;
+      left: calc(1.6rem - 0.3ch);
       position: absolute;
       top: 1rem;
     }
@@ -165,16 +191,17 @@ const renderStyle = () => `
 
 /* Home */
 
-  #sections > a {
+  #sections a {
     font-weight: 700;
     display: block;
+    margin-bottom: 0.2rem;
   }
 
-    #sections > a .metadata {
-      font-weight: normal;
-    }
+  #sections h2 {
+    margin: 2.8rem 0 1.4rem;
+  }
 
-  #sections > h2:not(.disabled) {
+  #sections h2:not(.disabled) {
     font-weight: 300;
   }
 
@@ -192,7 +219,7 @@ const renderStyle = () => `
       bottom: 0; 
       right: 0;
       content: '';
-      background: repeating-linear-gradient(0deg, transparent, transparent 1px, ${PALETTE.backgroundColor} 1px, ${PALETTE.backgroundColor} 2px);
+      background: repeating-linear-gradient(45deg, transparent, transparent 1px, ${PALETTE.backgroundColor} 1px, ${PALETTE.backgroundColor} 2px);
     }
 
 
@@ -256,6 +283,7 @@ const renderStyle = () => `
 
     body:not(.page-home) #content a:hover {
       color: ${PALETTE.linkTextHover};
+      box-shadow: inset 0 -1px 0 ${PALETTE.linkTextHover};
     }
 
 
