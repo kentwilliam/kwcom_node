@@ -29,7 +29,7 @@ I love this job.
 
 Unfortunately, despite of all this, it’s easy to end up making only temporary dents in the universe.
 
-The [online](https://www.facebook.com/threadsofmystery/) [casual](http://www.wsop.com/news/2010/Jul/3017/WSOP-FACEBOOK-POKER-GAME-AVAILABLE-NOW.html) [games](http://www.adweek.com/digital/verdonia-game-facebook-playdom/) I worked on back when I was at Disney have all been shut down. The _whole company_ I worked for [between 2014 and 2016](https://www.facebook.com/mpathinc/photos/rpp.351098058357179/542972675836382/?type=3&theater) is gone, along with [the drag-and-drop-to-build-apps platform](https://vimeo.com/152013041) we built.
+The [online](https://www.facebook.com/threadsofmystery/) [casual](http://www.wsop.com/news/2010/Jul/3017/WSOP-FACEBOOK-POKER-GAME-AVAILABLE-NOW.html) [games](http://www.adweek.com/digital/verdonia-game-facebook-playdom/) I worked on back when I was at Disney have all been shut down. The _whole company_ I worked for [between 2014 and 2016](https://www.facebook.com/mpathinc/photos/rpp.351098058357179/542972675836382/?type=3%26theater) is gone, along with [the drag-and-drop-to-build-apps platform](https://vimeo.com/152013041) we built.
 
 Digital stuff is amazing in that it’s a [material without qualities](https://mitpress.mit.edu/books/thoughtful-interaction-design)—it can become anything! But it’s also a material that seems to disintegrate more easily than almost anything else.
 

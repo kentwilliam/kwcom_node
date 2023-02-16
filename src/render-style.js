@@ -12,46 +12,21 @@ const PALETTE = {
   textAccent: "#222",
 };
 
-const CONTENT_FONT = `
-  sans-serif
-`;
-
-const MONOSPACE_FONT = `
-  "SFMono-Regular",
-  "Liberation Mono",
-  Menlo,
-  monospace
-`;
+const FONTS = {
+  content: `sans-serif`,
+  monospace: `"SFMono-Regular", "Liberation Mono", Menlo, monospace`,
+};
 
 const renderStyle = () => `
 
 /* General */
-
-  @font-face {
-    font-family: 'Anderson Grotesk';
-    font-style: normal;
-    font-weight: normal;
-    src: url('/static/anderson-grotesk-normal.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Anderson Grotesk';
-    font-style: normal;
-    font-weight: bold;
-    src: url('/static/anderson-grotesk-ultrabold.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Anderson Grotesk';
-    font-style: italic;
-    font-weight: normal;
-    src: url('/static/anderson-grotesk-oblique.woff2') format('woff2');
-  }
 
   body {
     align-items: stretch;
     background-color: ${PALETTE.backgroundColor};
     color: ${PALETTE.text};
     display: grid;
-    font-family: ${CONTENT_FONT};
+    font-family: ${FONTS.content};
     font-size: 1.2rem;
     grid-template-columns: minmax(2ch, 5vw) 1fr minmax(12em, 60ch) 1fr minmax(2ch, 5vw);
     grid-template-rows: 4.5rem 40px auto 70px;
@@ -70,21 +45,21 @@ const renderStyle = () => `
       background: white;
     }
 
-    #content {
-      grid-column-start: 4;
-      grid-column-end: -4;
-      grid-row-start: 3;
-      grid-row-end: -2;
-      transition: .2s;
-      padding-bottom: 3rem;
-    }
+  #content {
+    grid-column-start: 4;
+    grid-column-end: -4;
+    grid-row-start: 3;
+    grid-row-end: -2;
+    transition: .2s;
+    padding-bottom: 3rem;
+  }
 
   p, blockquote, pre, ol, ul, .metadata {
     margin: 0 0 1.4rem;
     padding: 0;
   }
 
-  ol, ul {
+  body:not(.page-root) ol, ul {
     margin-left: 2rem;
   }
 
@@ -140,6 +115,8 @@ const renderStyle = () => `
     background-color: #c33800;
     border-radius: 0 0 6px 6px;
     box-shadow: inset 0 4px 0 0 #a62f00;
+    display: flex;
+    align-items: flex-end;
     position: relative;
   }
 
@@ -147,35 +124,37 @@ const renderStyle = () => `
       color: white;
       display: inline-block;
       font-size: 1rem;
-      letter-spacing: 0.3ch;
+      font-weight: normal;
+      letter-spacing: 0.6ch;
       padding: 0;
       margin: 0;
       transition: 0.15s all ease-out;
       margin-left: 1.5ch;
     }
 
-      .page-home #logo h1 {
+      .page-root #logo h1 {
         margin-left: 0;
       }
 
-      body:not(.page-home) #logo:hover {
+      body:not(.page-root) #logo:hover {
         opacity: .8;
       }
 
-      body.page-home #logo:hover {
+      body.page-root #logo:hover {
         cursor: default;
       }
 
 
     #logo::before {
+      bottom: 1rem;
       color: white;
       content: '\u00ab';
+      font-weight: normal;
       left: calc(1.6rem - 0.3ch);
       position: absolute;
-      top: 1rem;
     }
 
-      .page-home #logo::before {
+      .page-root #logo::before {
         left: 0;
         opacity: 0;
       }
@@ -193,7 +172,7 @@ const renderStyle = () => `
 
   #sections a {
     font-weight: 700;
-    display: block;
+    display: inline-block;
     margin-bottom: 0.2rem;
   }
 
@@ -244,7 +223,7 @@ const renderStyle = () => `
 /* Code */
 
   pre, code {
-    font-family: ${MONOSPACE_FONT};
+    font-family: ${FONTS.monospace};
     font-size: 1.1rem;
     background: ${PALETTE.monoBackground};
     color: ${PALETTE.monoText}
@@ -275,32 +254,41 @@ const renderStyle = () => `
 
 /* Links */
 
-  body:not(.page-home) #content a {
+  #content a {
     color: ${PALETTE.linkText};
     transition: .2s;
-    box-shadow: inset 0 -1px 0 ${PALETTE.linkText};
+    border-bottom: 1px dotted ${PALETTE.linkText};
   }
 
-    body:not(.page-home) #content a:hover {
+    #content a:hover {
       color: ${PALETTE.linkTextHover};
-      box-shadow: inset 0 -1px 0 ${PALETTE.linkTextHover};
+      border-bottom: 1px dotted ${PALETTE.linkTextHover};
     }
+
+
+/* Lists */
+  
+  body:not(.page-root) #content li {
+    list-style-type: disc;
+    margin: 0 0 1.4rem;
+    padding-left: 0.3ch;
+  }
 
 
 /* Headings */
 
-  body:not(.page-home) #content h1 {
+  body:not(.page-root) #content h1 {
     font-size: 1.7rem;
     line-height: 1.4;
     margin-bottom: 0.4rem;
     margin-top: 2.8rem;
   }
 
-  body:not(.page-home) #content .metadata {
+  body:not(.page-root) #content .metadata {
     margin-bottom: 2.8rem;
   }
 
-  body:not(.page-home) #content h2 {
+  body:not(.page-root) #content h2 {
     font-size: 1.4rem;
     margin-top: 2.8rem;
   }
