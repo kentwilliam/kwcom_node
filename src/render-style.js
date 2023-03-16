@@ -1,11 +1,11 @@
 // @format
 
 const PALETTE = {
-  backgroundColor: "#ece7e7",
+  backgroundColor: "white", //"#ece7e7",
   metadata: "#777",
   blockquoteForeground: "#5a5a5a",
-  monoText: "#6d1f00",
-  monoBackground: "#d8d1d1",
+  monoText: "#221100", // "#6d1f00",
+  monoBackground: "#e8e1e1", // "#d8d1d1",
   linkText: "#07a",
   linkTextHover: "#2abfff",
   text: "#221100",
@@ -13,11 +13,39 @@ const PALETTE = {
 };
 
 const FONTS = {
-  content: `sans-serif`,
-  monospace: `"SFMono-Regular", "Liberation Mono", Menlo, monospace`,
+  content: `sohne, serif`, //"Univers LT Std", sans-serif`,
+  monospace: `sohne-mono, serif`, // "SFMono-Regular", "Liberation Mono", Menlo, monospace`,
 };
 
 const renderStyle = () => `
+
+@font-face {
+  font-family: 'sohne';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/static/soehne-halbfett.woff2') format('woff');
+}
+
+@font-face {
+  font-family: 'sohne';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/static/soehne-buch.woff2') format('woff');
+}
+
+@font-face {
+  font-family: 'sohne';
+  font-weight: 400;
+  font-style: italic;
+  src: url('/static/soehne-buch-kursiv.woff2') format('woff');
+}
+
+@font-face {
+  font-family: 'sohne-mono';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/static/soehne-mono-buch.woff2') format('woff');
+}
 
 /* General */
 
@@ -134,9 +162,9 @@ const renderStyle = () => `
     #logo h1 {
       color: white;
       display: inline-block;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: normal;
-      letter-spacing: 0.6ch;
+      letter-spacing: 0.3ch;
       padding: 0;
       margin: 0;
       transition: 0.15s all ease-out;
@@ -235,7 +263,7 @@ const renderStyle = () => `
 
   pre, code {
     font-family: ${FONTS.monospace};
-    font-size: 1.1rem;
+    font-size: 1rem;
     background: ${PALETTE.monoBackground};
     color: ${PALETTE.monoText}
   }
@@ -271,9 +299,9 @@ const renderStyle = () => `
     background-image: repeating-linear-gradient(
       180deg, 
       transparent 0, 
-      transparent calc(1em + 5px), 
-      ${PALETTE.linkText} calc(1em + 6px), 
-      transparent calc(1em + 6px)
+      transparent calc(0.9em + 6px), 
+      ${PALETTE.linkText} calc(0.9em + 7px), 
+      transparent calc(0.9em + 7px)
     );
   }
 
@@ -282,9 +310,9 @@ const renderStyle = () => `
       background-image: repeating-linear-gradient(
         180deg, 
         transparent 0, 
-        transparent calc(1em + 5px), 
-        ${PALETTE.linkTextHover} calc(1em + 6px), 
-        transparent calc(1em + 6px)
+        transparent calc(0.9em + 6px), 
+        ${PALETTE.linkTextHover} calc(0.9em + 7px), 
+        transparent calc(0.9em + 7px)
       );
     }
 
@@ -294,6 +322,7 @@ const renderStyle = () => `
   body:not(.page-root) #content li {
     list-style-type: disc;
     padding-left: 0.3ch;
+    margin: 0 0 0.7rem;
   }
 
 

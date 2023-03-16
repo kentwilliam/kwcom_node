@@ -27,12 +27,12 @@ const renderPage = (pageID, content, contentTitle, contentSummary, request) => `
       <meta name="theme-color" content="#ffffff">
 
       <!-- -->
-      <meta name="description" content="${contentSummary}" />
+      <!-- <meta name="description" content="" /> -->
       <meta property="og:title" content="${contentTitle}" />
       <meta property="og:type" content="article" />
       <meta property="og:url" content="${request.url}" />
       <meta property="og:image" content="https://kentwilliam.com/static/byline.jpg" />
-      <meta property="og:description" content="${contentSummary}" />
+      <!-- <meta property="og:description" content="" /> -->
       <meta property="og:site_name" content="${siteConfig.title}" />
     </head>
     <body class="page-${pageID}">

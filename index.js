@@ -13,6 +13,9 @@ const ONE_MINUTE = 60 * 1000; /* ms */
 
 const CACHE_TIMEOUT = 10 * 1000;
 
+const LOCAL_PORT = 8125;
+const LOCAL_HOST = `http://localhost:${LOCAL_PORT}`;
+
 const server = (request, response) => {
   log("Request: ", request.url);
 
@@ -132,7 +135,7 @@ const renderNotes = (notes, filter, section) => `
       .map(
         (note) => `
         <li class="note">
-          <a href="${note.url}">
+          <a href="${note.path}">
             ${note.title}
           </a>
           <div class="metadata">
@@ -186,14 +189,15 @@ class Note {
       Math.floor(text.split(" ").length / wordsPerMinute)
     );
 
-    this.fullURL = "https://kentwilliam.com" + this.url;
+    const path = filePath.replace(/^static/, "").replace(/\.md$/, "");
+
+    this.path = path;
     this.published = published;
     this.publishedString = publishedString;
     this.readTimeInMinutes = readTimeInMinutes;
     this.summary = summary;
     this.text = text;
     this.title = title;
-    this.url = filePath.replace(/^static/, "").replace(/\.md$/, "");
   }
 }
 
@@ -299,23 +303,29 @@ const createRoute = (config) => {
 
 const renderRSS = (response, request) =>
   getAllNotes(response).then((notes) => {
+    const host =
+      request.connection.encrypted == null
+        ? LOCAL_HOST
+        : "https://" + request.connection.host;
+
     const pageContent = `<?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
         <channel>
           <title>${siteConfig.title}</title>
           <description>${siteConfig.description}</description>
-          <link>${request.url}</link>
+          <link>${host}/feed</link>
           <copyright>${new Date().getFullYear()} kentwilliam.com All rights reserved</copyright>
           <ttl>1800</ttl>
           ${notes
             .map(([filePath, markdown]) => new Note(filePath, markdown))
+            .sort((a, b) => (a.published > b.published ? -1 : 1))
             .map(
               (note) => `
                 <item>
                   <title>${note.title.replace(/&/g, "&amp;")}</title>
                   <description><![CDATA[${note.summary}]]></description>
-                  <link>${note.fullURL}</link>
-                  <guid>${note.fullURL}</guid>
+                  <link>${host + note.path}</link>
+                  <guid>${host + note.path}</guid>
                   <pubDate>${new Date(note.published).toUTCString()}</pubDate>
                 </item>
               `
@@ -369,6 +379,6 @@ const respond = ({
   response.end(content);
 };
 
-http.createServer(server).listen(8125);
+http.createServer(server).listen(LOCAL_PORT);
 
-log("Server running at http://localhost:8125/");
+log("Server running at ${LOCAL_HOST}");
