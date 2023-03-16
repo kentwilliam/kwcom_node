@@ -27,7 +27,7 @@ const renderStyle = () => `
     color: ${PALETTE.text};
     display: grid;
     font-family: ${FONTS.content};
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     grid-template-columns: minmax(2ch, 5vw) 1fr minmax(12em, 60ch) 1fr minmax(2ch, 5vw);
     grid-template-rows: 4.5rem 40px auto 70px;
     justify-items: stretch;
@@ -86,11 +86,13 @@ const renderStyle = () => `
 
     .metadata .byline {
       border-radius: 50%;
-      height: 24px;
-      width: 24px;
-      line-height: 0;
       float: left;
+      height: 24px;
+      line-height: 0;
       margin-right: 1ch;
+      position: relative;
+      top: -1px;
+      width: 24px;
     }
 
 

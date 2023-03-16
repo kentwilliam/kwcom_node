@@ -4,6 +4,7 @@ const marked = require("marked");
 const memory_cache = require("memory-cache");
 const path = require("path");
 const renderPage = require("./src/render-page");
+const siteConfig = require("./src/site-config");
 
 // Alphas, numbers, slash, and dash, plus an optional extension
 const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?$/;
@@ -168,7 +169,9 @@ class Note {
     const rawText = markdown.replace(/^[^~]+/, "").slice(1);
     // Use XHTML to ensure RSS compatible markup
     const text = marked.parse(rawText, { xhtml: true });
-    const summary = text.slice(3, text.indexOf("</p>"));
+
+    const summaryIndex = text.indexOf("</p>");
+    const summary = summaryIndex === -1 ? "" : text.slice(3, summaryIndex);
 
     // Current-year dates show without year, others show with year
     const publishedDate = new Date(published);
@@ -183,13 +186,14 @@ class Note {
       Math.floor(text.split(" ").length / wordsPerMinute)
     );
 
-    this.url = filePath.replace(/^static/, "").replace(/\.md$/, "");
     this.fullURL = "https://kentwilliam.com" + this.url;
     this.published = published;
     this.publishedString = publishedString;
+    this.readTimeInMinutes = readTimeInMinutes;
+    this.summary = summary;
     this.text = text;
     this.title = title;
-    this.readTimeInMinutes = readTimeInMinutes;
+    this.url = filePath.replace(/^static/, "").replace(/\.md$/, "");
   }
 }
 
@@ -217,7 +221,7 @@ const renderNote = (response, request) => {
         ${note.text}
       `,
       "",
-      "summary test",
+      note.summary,
       request
     );
 
@@ -309,7 +313,7 @@ const renderRSS = (response, request) =>
               (note) => `
                 <item>
                   <title>${note.title.replace(/&/g, "&amp;")}</title>
-                  <description><![CDATA[${note.text}]]></description>
+                  <description><![CDATA[${note.summary}]]></description>
                   <link>${note.fullURL}</link>
                   <guid>${note.fullURL}</guid>
                   <pubDate>${new Date(note.published).toUTCString()}</pubDate>
@@ -338,7 +342,6 @@ const log = (...args) => {
 
   console.log(...args);
 };
-
 
 const ROUTES = [
   createRoute({ path: "/", render: renderHome }),
