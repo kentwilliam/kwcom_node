@@ -6,19 +6,23 @@ const path = require("path");
 const renderPage = require("./src/render-page");
 
 // Alphas, numbers, slash, and dash, plus an optional extension
-const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,5})?$/;
+const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?$/;
 
 const ONE_MINUTE = 60 * 1000; /* ms */
 
-const CACHE_TIMEOUT = ONE_MINUTE;
+const CACHE_TIMEOUT = 10 * 1000;
 
 const server = (request, response) => {
-  console.log("Creating server");
+  log("Request: ", request.url);
 
   if (request.method !== "GET") {
-    response.statusCode = 501;
-    response.setHeader("Content-Type", "text/plain");
-    response.end("Method not implemented");
+    respond({
+      response,
+      request,
+      content: "Method not implemented",
+      contentType: "text/plain",
+      statusCode: 501,
+    });
     return;
   }
 
@@ -26,21 +30,29 @@ const server = (request, response) => {
 
   const isValidRoute = VALID_ROUTE.test(request.url);
   if (!isValidRoute) {
-    console.log("Invalid route");
-    renderNotFound(response);
+    log("Invalid route");
+    renderNotFound(response, request);
     return;
   }
 
-  const cachedContent = memory_cache.get(request.url);
-  if (cachedContent != null) {
-    send(response, cachedContent);
+  const { content, contentType } = memory_cache.get(request.url) ?? {};
+  if (content != null) {
+    log("returing cached response");
+    respond({
+      response,
+      request,
+      content,
+      contentType,
+    });
     return;
+  } else {
+    log("generating new response");
   }
 
   const route = ROUTES.find((route) => route.match(request.url));
   if (route == null) {
-    console.log("Not found");
-    renderNotFound(response);
+    log("Not found");
+    renderNotFound(response, request);
     return;
   }
 
@@ -61,8 +73,8 @@ const getAllNotes = (response) =>
   new Promise((resolve) =>
     fs.readdir("static/notes", (error, files) => {
       if (error) {
-        console.log({ error });
-        renderError(response);
+        log({ error });
+        renderError(response, request);
         return;
       }
 
@@ -71,7 +83,7 @@ const getAllNotes = (response) =>
         .map((file) => `static/notes/${file}`);
 
       Promise.all(fileNames.map((file) => readMarkdownFile(file)))
-        .catch((error) => console.log({ error }) || renderError(response))
+        .catch((error) => log({ error }) || renderError(response, request))
         .then(resolve);
     })
   );
@@ -103,11 +115,11 @@ const renderHome = (response, request, isArchive = false) =>
       </nav>
     `;
 
-    const pageContent = renderPage("root", sections);
-
-    memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
-
-    send(response, pageContent, 200);
+    respond({
+      request,
+      content: renderPage("root", sections, "", "", request),
+      response,
+    });
   });
 
 const renderNotes = (notes, filter, section) => `
@@ -156,17 +168,13 @@ class Note {
     const rawText = markdown.replace(/^[^~]+/, "").slice(1);
     // Use XHTML to ensure RSS compatible markup
     const text = marked.parse(rawText, { xhtml: true });
+    const summary = text.slice(3, text.indexOf("</p>"));
 
     // Current-year dates show without year, others show with year
     const publishedDate = new Date(published);
-    const currentYear = new Date().getFullYear();
-    const year =
-      currentYear === publishedDate.getFullYear()
-        ? ""
-        : ", " + publishedDate.getFullYear();
     const publishedString = `
       ${publishedDate.toLocaleString("en-us", { month: "long" })} 
-      ${publishedDate.getDate()}${year}
+      ${publishedDate.getDate()}, ${publishedDate.getFullYear()}
     `;
 
     const wordsPerMinute = 180;
@@ -176,7 +184,7 @@ class Note {
     );
 
     this.url = filePath.replace(/^static/, "").replace(/\.md$/, "");
-    this.fullURL = "https://kentwilliam.com/" + this.url;
+    this.fullURL = "https://kentwilliam.com" + this.url;
     this.published = published;
     this.publishedString = publishedString;
     this.text = text;
@@ -190,8 +198,8 @@ const renderNote = (response, request) => {
 
   fs.readFile(filePath, { encoding: "utf-8" }, (error, markdown) => {
     if (error) {
-      console.log({ error });
-      renderNotFound(response);
+      log({ error });
+      renderNotFound(response, request);
       return;
     }
 
@@ -202,24 +210,42 @@ const renderNote = (response, request) => {
       `
         <h1>${note.title}</h1>
         <div class="metadata">
+          <span><img src="/static/byline.jpg" class="byline"> Kent William Innholt</span>
           <time datetime=${note.published}>${note.publishedString}</time>
           <span>${note.readTimeInMinutes} min read</span>
         </div>
         ${note.text}
-      `
+      `,
+      "",
+      "summary test",
+      request
     );
 
-    memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
-
-    send(response, pageContent, 200);
+    respond({
+      request,
+      content: pageContent,
+      response,
+    });
   });
 };
 
-const renderNotFound = (response) =>
-  send(response, renderPage("not-found", "Not found"), 404);
+const renderNotFound = (response, request) =>
+  respond({
+    cacheResponse: false,
+    content: renderPage("not-found", "Not found", "", "", request),
+    request,
+    response,
+    statusCode: 404,
+  });
 
-const renderError = (response) =>
-  send(response, renderPage("error", "Server error"), 500);
+const renderError = (response, request) =>
+  respond({
+    cacheResponse: false,
+    content: renderPage("error", "Server error", "", "", request),
+    request,
+    response,
+    statusCode: 500,
+  });
 
 const MIME_TYPES = {
   gif: "image/gif",
@@ -240,7 +266,7 @@ const renderStatic = (response, request) => {
     .replace("/static", "");
 
   if (requestPath.endsWith("/") || requestPath.includes("..")) {
-    renderError(response);
+    renderError(response, request);
     return;
   }
 
@@ -249,7 +275,7 @@ const renderStatic = (response, request) => {
   const mimeType = MIME_TYPES[path.extname(file).slice(1)];
 
   if (mimeType == null) {
-    renderError(response);
+    renderError(response, request);
     return;
   }
 
@@ -258,7 +284,7 @@ const renderStatic = (response, request) => {
     response.setHeader("Content-Type", mimeType);
     stream.pipe(response);
   });
-  stream.on("error", () => renderError(response));
+  stream.on("error", () => renderError(response, request));
 };
 
 const createRoute = (config) => {
@@ -272,9 +298,9 @@ const renderRSS = (response, request) =>
     const pageContent = `<?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
         <channel>
-          <title>Field notes by Kent William Innholt</title>
-          <description>Design, code, videogames, pain, and beauty. He/him.</description>
-          <link>https://www.kentwilliam.com</link>
+          <title>${siteConfig.title}</title>
+          <description>${siteConfig.description}</description>
+          <link>${request.url}</link>
           <copyright>${new Date().getFullYear()} kentwilliam.com All rights reserved</copyright>
           <ttl>1800</ttl>
           ${notes
@@ -294,31 +320,52 @@ const renderRSS = (response, request) =>
         </channel>
       </rss>`;
 
-    //memory_cache.put(request.url, pageContent, CACHE_TIMEOUT);
-
-    response.writeHead(200, { "Content-Type": "application/rss+xml" });
-    response.end(pageContent);
+    respond({
+      content: pageContent,
+      contentType: "application/rss+xml",
+      request,
+      response,
+    });
   });
 
-//<description></description>
 //<lastBuildDate>Mon, 6 Sep 2010 00:01:00 +0000</lastBuildDate>
 //<pubDate>Sun, 6 Sep 2009 16:20:00 +0000</pubDate>
 
+const log = (...args) => {
+  if (process.env.DEBUG != "TRUE") {
+    return;
+  }
+
+  console.log(...args);
+};
+
+
 const ROUTES = [
   createRoute({ path: "/", render: renderHome }),
-  //createRoute({ path: "/articles.rss", render: renderRSS }),
-  //createRoute({ path: "/feed", render: renderRSS }),
+  createRoute({ path: "/articles.rss", render: renderRSS }),
+  createRoute({ path: "/feed", render: renderRSS }),
   createRoute({ path: "/archive", render: renderArchive }),
   createRoute({ path: "/notes/:slug", render: renderNote }),
   createRoute({ path: "/404", render: renderNotFound }),
   createRoute({ path: "/static/:file", render: renderStatic }),
 ];
 
-const send = (response, content, statusCode = 200) => {
-  response.writeHead(statusCode, { "Content-Type": "text/html" });
+const respond = ({
+  cacheResponse = true,
+  content,
+  contentType = "text/html",
+  response,
+  request,
+  statusCode = 200,
+}) => {
+  if (cacheResponse) {
+    log("storing to cache");
+    memory_cache.put(request.url, { content, contentType }, CACHE_TIMEOUT);
+  }
+  response.writeHead(statusCode, { "Content-Type": contentType });
   response.end(content);
 };
 
 http.createServer(server).listen(8125);
 
-console.log("Server running at http://localhost:8125/");
+log("Server running at http://localhost:8125/");

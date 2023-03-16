@@ -4,8 +4,8 @@ const PALETTE = {
   backgroundColor: "#ece7e7",
   metadata: "#777",
   blockquoteForeground: "#5a5a5a",
-  monoText: "#314157",
-  monoBackground: "#eee",
+  monoText: "#6d1f00",
+  monoBackground: "#d8d1d1",
   linkText: "#07a",
   linkTextHover: "#2abfff",
   text: "#221100",
@@ -81,7 +81,16 @@ const renderStyle = () => `
 
     .metadata > *:not(:last-child):after {
       content: '\u00B7';
-      margin: 0 .2rem;
+      margin: 0 .8ch;
+    }
+
+    .metadata .byline {
+      border-radius: 50%;
+      height: 24px;
+      width: 24px;
+      line-height: 0;
+      float: left;
+      margin-right: 1ch;
     }
 
 
@@ -172,7 +181,7 @@ const renderStyle = () => `
 
   #sections a {
     font-weight: 700;
-    display: inline-block;
+    display: inline;
     margin-bottom: 0.2rem;
   }
 
@@ -257,12 +266,24 @@ const renderStyle = () => `
   #content a {
     color: ${PALETTE.linkText};
     transition: .2s;
-    border-bottom: 1px dotted ${PALETTE.linkText};
+    background-image: repeating-linear-gradient(
+      180deg, 
+      transparent 0, 
+      transparent calc(1em + 5px), 
+      ${PALETTE.linkText} calc(1em + 6px), 
+      transparent calc(1em + 6px)
+    );
   }
 
     #content a:hover {
       color: ${PALETTE.linkTextHover};
-      border-bottom: 1px dotted ${PALETTE.linkTextHover};
+      background-image: repeating-linear-gradient(
+        180deg, 
+        transparent 0, 
+        transparent calc(1em + 5px), 
+        ${PALETTE.linkTextHover} calc(1em + 6px), 
+        transparent calc(1em + 6px)
+      );
     }
 
 
@@ -270,7 +291,6 @@ const renderStyle = () => `
   
   body:not(.page-root) #content li {
     list-style-type: disc;
-    margin: 0 0 1.4rem;
     padding-left: 0.3ch;
   }
 
@@ -278,7 +298,7 @@ const renderStyle = () => `
 /* Headings */
 
   body:not(.page-root) #content h1 {
-    font-size: 1.7rem;
+    font-size: 1.9rem;
     line-height: 1.4;
     margin-bottom: 0.4rem;
     margin-top: 2.8rem;
@@ -286,6 +306,7 @@ const renderStyle = () => `
 
   body:not(.page-root) #content .metadata {
     margin-bottom: 2.8rem;
+    margin-top: 1rem;
   }
 
   body:not(.page-root) #content h2 {
