@@ -3,7 +3,14 @@
 const renderStyle = require("./render-style");
 const siteConfig = require("./site-config");
 
-const renderPage = (pageID, content, contentTitle, contentSummary, request) => `
+const renderPage = (
+  pageID,
+  content,
+  contentTitle,
+  contentSummary,
+  request,
+  contentImage = "https://kentwilliam.com/static/byline-240.jpg"
+) => `
   <!doctype html>
   <html lang="en-US">
     <head>
@@ -31,10 +38,17 @@ const renderPage = (pageID, content, contentTitle, contentSummary, request) => `
       <meta property="og:title" content="${contentTitle}" />
       <meta property="og:type" content="article" />
       <meta property="og:url" content="${request.url}" />
-      <meta property="og:image" content="https://kentwilliam.com/static/byline-240.jpg" />
-      <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline-240.jpg" />
+      <meta property="og:image" content="${contentImage}" />
+      <meta property="og:image:secure_url" content="${contentImage}" />
       <meta property="og:description" content="${contentSummary}" />
       <meta property="og:site_name" content="${siteConfig.title}" />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@oerhoert" />
+      <meta name="twitter:title" content="${contentTitle}" />
+      <meta name="twitter:description" content="${contentSummary}" />
+      <meta name="twitter:image" content="${contentImage}" />
+
     </head>
     <body class="page-${pageID}">
       <nav id="header">
