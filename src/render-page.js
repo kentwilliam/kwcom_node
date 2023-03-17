@@ -37,7 +37,7 @@ const renderPage = (
       <meta name="description" content="${contentSummary}" />
       <meta property="og:title" content="${contentTitle}" />
       <meta property="og:type" content="article" />
-      <meta property="og:url" content="${request.url}" />
+      <meta property="og:url" content="https://kentwilliam.com${request.url}" />
       <meta property="og:image" content="${contentImage}" />
       <meta property="og:image:secure_url" content="${contentImage}" />
       <meta property="og:description" content="${contentSummary}" />
@@ -45,11 +45,12 @@ const renderPage = (
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@oerhoert" />
+      <meta name="twitter:creator" content="@oerhoert" />
       <meta name="twitter:title" content="${contentTitle}" />
       <meta name="twitter:description" content="${contentSummary}" />
       <meta name="twitter:image" content="${contentImage}" />
 
-    </head>
+    </head>site
     <body class="page-${pageID}">
       <nav id="header">
         <a href="/" id="logo">
