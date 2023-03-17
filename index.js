@@ -121,7 +121,15 @@ const renderHome = (response, request, isArchive = false) =>
 
     respond({
       request,
-      content: renderPage("root", sections, "", "", request),
+      content: renderPage(
+        "root",
+        sections,
+        isArchive
+          ? siteConfig.title + ": Archive"
+          : siteConfig.title + ": Home",
+        "",
+        request
+      ),
       response,
     });
   });
@@ -173,8 +181,12 @@ class Note {
     // Use XHTML to ensure RSS compatible markup
     const text = marked.parse(rawText, { xhtml: true });
 
+    // Pick first paragraph, strip all HTML
     const summaryIndex = text.indexOf("</p>");
-    const summary = summaryIndex === -1 ? "" : text.slice(3, summaryIndex);
+    const summary =
+      summaryIndex === -1
+        ? ""
+        : text.slice(3, summaryIndex).replace(/(<([^>]+)>)/gi, "");
 
     // Current-year dates show without year, others show with year
     const publishedDate = new Date(published);
@@ -224,7 +236,7 @@ const renderNote = (response, request) => {
         </div>
         ${note.text}
       `,
-      "",
+      note.title,
       note.summary,
       request
     );
@@ -240,7 +252,13 @@ const renderNote = (response, request) => {
 const renderNotFound = (response, request) =>
   respond({
     cacheResponse: false,
-    content: renderPage("not-found", "Not found", "", "", request),
+    content: renderPage(
+      "not-found",
+      "Not found",
+      "Not found",
+      "We were unable to locate a page at this address",
+      request
+    ),
     request,
     response,
     statusCode: 404,
@@ -249,7 +267,13 @@ const renderNotFound = (response, request) =>
 const renderError = (response, request) =>
   respond({
     cacheResponse: false,
-    content: renderPage("error", "Server error", "", "", request),
+    content: renderPage(
+      "error",
+      "Server error",
+      "Server error",
+      "Oops! Something went wrong",
+      request
+    ),
     request,
     response,
     statusCode: 500,
