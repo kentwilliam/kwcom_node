@@ -31,8 +31,8 @@ const renderPage = (pageID, content, contentTitle, contentSummary, request) => `
       <meta property="og:title" content="${contentTitle}" />
       <meta property="og:type" content="article" />
       <meta property="og:url" content="${request.url}" />
-      <meta property="og:image" content="https://kentwilliam.com/static/byline_240.jpg" />
-      <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline_240.jpg" />
+      <meta property="og:image" content="https://kentwilliam.com/static/byline-240.jpg" />
+      <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline-240.jpg" />
       <meta property="og:description" content="${contentSummary}" />
       <meta property="og:site_name" content="${siteConfig.title}" />
     </head>
