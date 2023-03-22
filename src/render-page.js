@@ -9,7 +9,8 @@ const renderPage = (
   contentTitle,
   contentSummary,
   request,
-  contentImage = "https://kentwilliam.com/static/byline-240.jpg"
+  contentImage = "https://kentwilliam.com/static/byline-240.jpg",
+  moreContent,
 ) => `
   <!doctype html>
   <html lang="en-US">
@@ -50,7 +51,7 @@ const renderPage = (
       <meta name="twitter:description" content="${contentSummary}" />
       <meta name="twitter:image" content="${contentImage}" />
 
-    </head>site
+    </head>
     <body class="page-${pageID}">
       <nav id="header">
         <a href="/" id="logo">
@@ -63,6 +64,13 @@ const renderPage = (
       <div id="content">
         ${content}
       </div>
+      ${moreContent != null 
+        ? `
+          <aside id="more-content">
+            ${moreContent}
+          </aside>` 
+        : ''
+        }
     </body>
   </html>
 `;

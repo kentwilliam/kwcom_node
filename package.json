@@ -1,12 +1,11 @@
 {
-  "name": "kentwilliam_com",
+  "name": "kwcom_node",
   "version": "1.0.0",
   "description": "source for kentwilliam.com",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "DEBUG=TRUE nodemon ./index.js localhost 8125",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "DEBUG=TRUE nodemon ./index.js localhost 8125"
   },
   "author": "",
   "license": "ISC",

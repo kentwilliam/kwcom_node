@@ -128,7 +128,7 @@ const renderHome = (response, request, isArchive = false) =>
           ? siteConfig.title + ": Archive"
           : siteConfig.title + ": Home",
         "",
-        request
+        request,
       ),
       response,
     });
@@ -238,7 +238,8 @@ const renderNote = (response, request) => {
       `,
       note.title,
       note.summary,
-      request
+      request,
+      null,
     );
 
     respond({
@@ -405,4 +406,4 @@ const respond = ({
 
 http.createServer(server).listen(LOCAL_PORT);
 
-log("Server running at ${LOCAL_HOST}");
+log(`Server running at ${LOCAL_HOST}`);

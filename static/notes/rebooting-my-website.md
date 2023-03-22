@@ -7,13 +7,13 @@ updated: 2023-03-01 15:00:00
 
 I figured I'd write a few lines about this newest iteration of kentwilliam.com.
 
-Thus far, there's not that much truly *new* here. With time, I hope it can serve as a reasonable online portfolio of sorts, but for now, what's most important to me is to *write more*, and this will be my outlet.
+With time, I hope this site can serve as an online portfolio of sorts, but for now, my aim is simply to *write more*, and this will be my outlet.
 
 To get started and avoid over-thinking it, I'm planning to start writing up small notes on the books I've read recently, and perhaps also some on videogames and records of note. I like the idea of this site becoming a bit of a log of the things I've discovered and loved.
 
 ## What's the tech?
 
-Technically, this new version of the site is written on Node, using the [`marked`](https://www.npmjs.com/package/marked) and [`memory-cache`](https://www.npmjs.com/package/memory-cache) packages and not much else. The notes are markdown files, read on request and then cached in-memory. 
+Technically, this new version of the site is written on Node, using the `marked` and `memory-cache` NPM packages and not much else. The notes themselves are markdown files, read on request and then cached in-memory. 
 
 You can check out the implementation [on GitHub](https://github.com/kentwilliam/kwcom_node) if you're curious. 
 
@@ -46,7 +46,7 @@ Having said that, in going minimalist, some pain points make themselves known pr
 
 Additionally, I'm probably going to reintroduce a database soon as well. Right now, it's fine to pull in every note into memory to parse out its metadata, but that's only true because there are almost no notes on the site.
 
-One upside to this approach, though, is that I get to leverage Git for version history, and it becomes trivial to go back to the site the way it looked at any particular date. It also means the notes can be viewed directly [in the GitHub UI](https://github.com/kentwilliam/kwcom_node/tree/310878572e8a0d315a2feac65d614042447ff092/static/notes). I'm not sure how *useful* this is exactly, but it's a neat example of the interoperability upside of leveraging standard text formats.
+One upside to this approach, though, is that I get to leverage Git for version history, and it becomes trivial to go back to the site the way it looked at any particular date. It also means the notes can be viewed directly [in the GitHub UI](https://github.com/kentwilliam/kwcom_node/tree/310878572e8a0d315a2feac65d614042447ff092/static/notes). I'm not sure how *useful* this is exactly, but it's a neat example of the interoperability upside of leveraging standard text formats and versioning systems.
 
 Anyway, that's all there is to it. It's not terribly interesting, as such, yet, but I'm excited to get the site back up anyway.
 
