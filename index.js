@@ -7,7 +7,8 @@ const renderPage = require("./src/render-page");
 const siteConfig = require("./src/site-config");
 
 // Alphas, numbers, slash, and dash, plus an optional extension
-const VALID_ROUTE = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?$/;
+const VALID_ROUTE =
+  /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?(\?[a-zA-Z\d/-]+)?(\#[a-zA-Z\d/-]+)?$/;
 
 const ONE_MINUTE = 60 * 1000; /* ms */
 
@@ -53,7 +54,7 @@ const server = (request, response) => {
     log("generating new response");
   }
 
-  const route = ROUTES.find((route) => route.match(request.url));
+  const route = ROUTES.find((route) => route.match(getBasePath(request.url)));
   if (route == null) {
     log("Not found");
     renderNotFound(response, request);
@@ -61,6 +62,12 @@ const server = (request, response) => {
   }
 
   route.render(response, request);
+};
+
+const getBasePath = (path) => {
+  const queryParameterIndex = path.indexOf("?") || path.indexOf("#");
+
+  return queryParameterIndex !== -1 ? path.slice(0, queryParameterIndex) : path;
 };
 
 const readMarkdownFile = (filePath) =>
@@ -128,7 +135,7 @@ const renderHome = (response, request, isArchive = false) =>
           ? siteConfig.title + ": Archive"
           : siteConfig.title + ": Home",
         "",
-        request,
+        request
       ),
       response,
     });
@@ -214,7 +221,7 @@ class Note {
 }
 
 const renderNote = (response, request) => {
-  const filePath = `static${request.url}.md`;
+  const filePath = `static${getBasePath(request.url)}.md`;
 
   fs.readFile(filePath, { encoding: "utf-8" }, (error, markdown) => {
     if (error) {
@@ -239,7 +246,7 @@ const renderNote = (response, request) => {
       note.title,
       note.summary,
       request,
-      null,
+      null
     );
 
     respond({
@@ -293,10 +300,10 @@ const MIME_TYPES = {
 };
 
 const renderStatic = (response, request) => {
-  const requestPath = request.url
-    .toString()
-    .split("?")[0]
-    .replace("/static", "");
+  const requestPath = getBasePath(request.url.toString()).replace(
+    "/static",
+    ""
+  );
 
   if (requestPath.endsWith("/") || requestPath.includes("..")) {
     renderError(response, request);
