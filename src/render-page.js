@@ -39,8 +39,8 @@ const renderPage = (
       <meta property="og:title" content="${contentTitle}" />
       <meta property="og:type" content="article" />
       <meta property="og:url" content="https://kentwilliam.com${request.url}" />
-      <meta property="og:image" content="https://kentwilliam.com/static/byline-large.jpg" />
-      <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline-large.jpg" />
+      <meta property="og:image" content="https://kentwilliam.com/static/byline-large.png" />
+      <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline-large.png" />
       <meta property="og:description" content="${contentSummary}" />
       <meta property="og:site_name" content="${siteConfig.title}" />
 
@@ -49,7 +49,7 @@ const renderPage = (
       <meta name="twitter:creator" content="@oerhoert" />
       <meta name="twitter:title" content="${contentTitle}" />
       <meta name="twitter:description" content="${contentSummary}" />
-      <meta name="twitter:image" content="https://kentwilliam.com/static/byline-large.jpg" />
+      <meta name="twitter:image" content="https://kentwilliam.com/static/byline-large.png" />
 
     </head>
     <body class="page-${pageID}">
