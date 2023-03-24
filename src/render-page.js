@@ -51,6 +51,7 @@ const renderPage = (
       <meta name="twitter:description" content="${contentSummary}" />
       <meta name="twitter:image" content="https://kentwilliam.com/static/byline-large.png" />
 
+      <script defer data-domain="kentwilliam.com" src="https://plausible.io/js/script.js"></script>
     </head>
     <body class="page-${pageID}">
       <nav id="header">
