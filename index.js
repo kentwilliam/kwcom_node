@@ -1,5 +1,6 @@
 const fs = require("fs");
 const http = require("http");
+const stream = require("stream");
 const marked = require("marked");
 const memory_cache = require("memory-cache");
 const path = require("path");
@@ -16,9 +17,10 @@ const CACHE_TIMEOUT = 10 * 1000;
 
 const LOCAL_PORT = 8125;
 const LOCAL_HOST = `http://localhost:${LOCAL_PORT}`;
+console.log('running')
 
 const server = (request, response) => {
-  log("Request: ", request.url);
+  print("Request: ", request.url);
 
   if (request.method !== "GET") {
     respond({
@@ -35,28 +37,29 @@ const server = (request, response) => {
 
   const isValidRoute = VALID_ROUTE.test(request.url);
   if (!isValidRoute) {
-    log("Invalid route");
+    print("Invalid route");
     renderNotFound(response, request);
     return;
   }
 
-  const { content, contentType } = memory_cache.get(request.url) ?? {};
+  const { content, contentType, headers } = memory_cache.get(request.url) ?? {};
   if (content != null) {
-    log("returing cached response");
+    print("returing cached response", content.length);
     respond({
       response,
       request,
       content,
       contentType,
+      headers,
     });
     return;
   } else {
-    log("generating new response");
+    print("generating new response");
   }
 
   const route = ROUTES.find((route) => route.match(getBasePath(request.url)));
   if (route == null) {
-    log("Not found");
+    print("Not found");
     renderNotFound(response, request);
     return;
   }
@@ -84,7 +87,7 @@ const getAllNotes = (response) =>
   new Promise((resolve) =>
     fs.readdir("static/notes", (error, files) => {
       if (error) {
-        log({ error });
+        print({ error });
         renderError(response, request);
         return;
       }
@@ -94,7 +97,7 @@ const getAllNotes = (response) =>
         .map((file) => `static/notes/${file}`);
 
       Promise.all(fileNames.map((file) => readMarkdownFile(file)))
-        .catch((error) => log({ error }) || renderError(response, request))
+        .catch((error) => print({ error }) || renderError(response, request))
         .then(resolve);
     })
   );
@@ -225,7 +228,7 @@ const renderNote = (response, request) => {
 
   fs.readFile(filePath, { encoding: "utf-8" }, (error, markdown) => {
     if (error) {
-      log({ error });
+      print({ error });
       renderNotFound(response, request);
       return;
     }
@@ -312,19 +315,41 @@ const renderStatic = (response, request) => {
 
   const directory = process.env.PWD;
   const file = path.join(directory, "static", "resources", requestPath);
-  const mimeType = MIME_TYPES[path.extname(file).slice(1)];
+  const contentType = MIME_TYPES[path.extname(file).slice(1)];
 
-  if (mimeType == null) {
+  if (contentType == null) {
     renderError(response, request);
     return;
   }
 
-  const stream = fs.createReadStream(file);
-  stream.on("open", () => {
-    response.setHeader("Content-Type", mimeType);
-    stream.pipe(response);
-  });
-  stream.on("error", () => renderError(response, request));
+  try {
+    const content = fs.readFileSync(file).toString();
+
+    respond({
+      content,
+      contentType,
+      response,
+      request,
+    });
+  } catch (error) {
+    print({ error });
+    renderError(response, request);
+    return;
+  }
+
+  // use the toString() method to convert
+  // Buffer into String
+  //const fileContent = buffer.toString();
+
+  //const stream = fs.createReadStream(file);
+  //stream.on("error", () => renderError(response, request));
+
+  //streamToString(stream)
+  //.then(
+  //(content) =>
+  //print('new content', content.length) ||
+  //)
+  //.catch((error) => renderError(response, request));
 };
 
 const createRoute = (config) => {
@@ -377,16 +402,54 @@ const renderRSS = (response, request) =>
 //<lastBuildDate>Mon, 6 Sep 2010 00:01:00 +0000</lastBuildDate>
 //<pubDate>Sun, 6 Sep 2009 16:20:00 +0000</pubDate>
 
-const log = (...args) => {
-  if (process.env.DEBUG != "TRUE") {
-    return;
-  }
+const print = (...args) => {
 
   console.log(...args);
 };
 
+const proxyPlausibleJS = async (response, request) => {
+  try {
+    const script = await fetch("https://plausible.io/js/script.js");
+
+    if (!script.ok) {
+      print({ error: script.errors });
+      renderError(response, request);
+    }
+
+    const readableStream = stream.Readable.fromWeb(script.body);
+    readableStream.on("error", (error) => {
+      print({ error });
+      renderError(response, request);
+    });
+
+    const content = await streamToString(readableStream);
+
+    respond({
+      content,
+      contentType: MIME_TYPES.js,
+      response,
+      request,
+      headers: script.headers,
+    });
+  } catch (error) {
+    print({ error });
+    renderError(response, request);
+  }
+};
+
+function streamToString(stream) {
+  const chunks = [];
+
+  return new Promise((resolve, reject) => {
+    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    stream.on("error", (error) => reject(error));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+  });
+}
+
 const ROUTES = [
   createRoute({ path: "/", render: renderHome }),
+  createRoute({ path: "/log.js", render: proxyPlausibleJS }),
   createRoute({ path: "/articles.rss", render: renderRSS }),
   createRoute({ path: "/feed", render: renderRSS }),
   createRoute({ path: "/archive", render: renderArchive }),
@@ -402,10 +465,19 @@ const respond = ({
   response,
   request,
   statusCode = 200,
+  headers = [],
 }) => {
   if (cacheResponse) {
-    log("storing to cache");
-    memory_cache.put(request.url, { content, contentType }, CACHE_TIMEOUT);
+    print("storing to cache");
+    memory_cache.put(
+      request.url,
+      { content, contentType, headers },
+      CACHE_TIMEOUT
+    );
+  }
+
+  for (const [header, value] of headers) {
+    response.setHeader(header, value);
   }
   response.writeHead(statusCode, { "Content-Type": contentType });
   response.end(content);
@@ -413,4 +485,4 @@ const respond = ({
 
 http.createServer(server).listen(LOCAL_PORT);
 
-log(`Server running at ${LOCAL_HOST}`);
+print(`Server running at ${LOCAL_HOST}`);
