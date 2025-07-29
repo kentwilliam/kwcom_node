@@ -15,7 +15,7 @@ const CACHE_TIMEOUT = 10 * 1000;
 
 const LOCAL_PORT = 8125;
 const LOCAL_HOST = `http://localhost:${LOCAL_PORT}`;
-console.log('running')
+console.log("running");
 
 const server = (request, response) => {
   print("Request: ", request.url);
@@ -279,34 +279,14 @@ const renderStatic = (response, request) => {
     return;
   }
 
-  try {
-    const content = fs.readFileSync(file).toString();
+  const stream = fs.createReadStream(file);
 
-    respond({
-      content,
-      contentType,
-      response,
-      request,
-    });
-  } catch (error) {
-    print({ error });
-    renderError(response, request);
-    return;
-  }
+  stream.on("open", () => {
+    response.setHeader("Content-Type", contentType);
+    stream.pipe(response);
+  });
 
-  // use the toString() method to convert
-  // Buffer into String
-  //const fileContent = buffer.toString();
-
-  //const stream = fs.createReadStream(file);
-  //stream.on("error", () => renderError(response, request));
-
-  //streamToString(stream)
-  //.then(
-  //(content) =>
-  //print('new content', content.length) ||
-  //)
-  //.catch((error) => renderError(response, request));
+  stream.on("error", () => renderError(response, request));
 };
 
 const createRoute = (config) => {
@@ -360,7 +340,6 @@ const renderRSS = (response, request) =>
 //<pubDate>Sun, 6 Sep 2009 16:20:00 +0000</pubDate>
 
 const print = (...args) => {
-
   console.log(...args);
 };
 
