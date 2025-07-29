@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "DEBUG=TRUE nodemon ./index.js localhost 8125"
+    "dev": "DEBUG=TRUE nodemon ./index.js localhost 3000"
   },
   "author": "",
   "license": "ISC",

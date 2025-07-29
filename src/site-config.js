@@ -1,8 +1,8 @@
 // @format
 
 const siteConfig = {
-  description: "Design, code, videogames, pain, and beauty. He/him.",
-  title: "Field notes by Kent William Innholt",
+  description: "Kent William Innholt's corner of the Internet",
+  title: "code, design, heart",
 };
 
 module.exports = siteConfig;

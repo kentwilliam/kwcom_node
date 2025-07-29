@@ -13,9 +13,8 @@ const VALID_ROUTE =
 
 const CACHE_TIMEOUT = 10 * 1000;
 
-const LOCAL_PORT = 8125;
-const LOCAL_HOST = `http://localhost:${LOCAL_PORT}`;
-console.log("running");
+const PORT = process.env.PORT || 3000;
+const LOCAL_HOST = `http://localhost:${PORT}`;
 
 const server = (request, response) => {
   print("Request: ", request.url);
@@ -418,6 +417,6 @@ const respond = ({
   response.end(content);
 };
 
-http.createServer(server).listen(LOCAL_PORT);
+http.createServer(server).listen(PORT);
 
 print(`Server running at ${LOCAL_HOST}`);
