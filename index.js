@@ -9,9 +9,7 @@ const siteConfig = require("./src/site-config");
 
 // Alphas, numbers, slash, and dash, plus an optional extension
 const VALID_ROUTE =
-  /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?(\?[a-zA-Z\d/-]+)?(\#[a-zA-Z\d/-]+)?$/;
-
-const ONE_MINUTE = 60 * 1000; /* ms */
+  /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?(\?[a-zA-Z\d/-]+)?(#[a-zA-Z\d/-]+)?$/;
 
 const CACHE_TIMEOUT = 10 * 1000;
 
@@ -80,10 +78,7 @@ const readMarkdownFile = (filePath) =>
     );
   });
 
-const renderArchive = (response, request) =>
-  renderHome(response, request, true);
-
-const getAllNotes = (response) =>
+const getAllNotes = (response, request) =>
   new Promise((resolve) =>
     fs.readdir("static/notes", (error, files) => {
       if (error) {
@@ -102,41 +97,16 @@ const getAllNotes = (response) =>
     })
   );
 
-const renderHome = (response, request, isArchive = false) =>
+const renderHome = (response, request) =>
   getAllNotes(response).then((notes) => {
-    const enabledSections = {
-      Archive: (note) => new Date(note.published).getFullYear() < 2022,
-      Notes: (note) => new Date(note.published).getFullYear() >= 2022,
-    };
-
-    const sections = `
-      <nav id="sections">
-        ${(isArchive
-          ? ["Archive"]
-          : ["Notes", "Reading", "Playing", "Listening to", "Work"]
-        )
-          .map(
-            (section) =>
-              `<h2 class="${
-                enabledSections[section] == null ? "disabled" : ""
-              }">${section}</h2>${
-                enabledSections[section] != null
-                  ? renderNotes(notes, enabledSections[section], section)
-                  : ""
-              }`
-          )
-          .join("")}
-      </nav>
-    `;
-
     respond({
       request,
       content: renderPage(
         "root",
-        sections,
-        isArchive
-          ? siteConfig.title + ": Archive"
-          : siteConfig.title + ": Home",
+        `<nav id="sections">
+          ${renderNotes(notes)}
+        </nav>`,
+        "Home",
         "",
         request
       ),
@@ -144,11 +114,10 @@ const renderHome = (response, request, isArchive = false) =>
     });
   });
 
-const renderNotes = (notes, filter, section) => `
+const renderNotes = (notes) => `
   <ol>
     ${notes
       .map(([filePath, markdown]) => new Note(filePath, markdown))
-      .filter(filter)
       .sort((a, b) => (a.published > b.published ? -1 : 1))
       .map(
         (note) => `
@@ -164,18 +133,6 @@ const renderNotes = (notes, filter, section) => `
       `
       )
       .join("")}
-    ${
-      section === "Notes"
-        ? `
-          <li class="note">
-            <a href="/archive" id="archive">Archive \u00bb</a>
-            <div class="metadata">
-              2014\u20132021 
-            </div>
-          </li>
-          `
-        : ""
-    }
   </ol>
 `;
 
@@ -452,14 +409,13 @@ const ROUTES = [
   createRoute({ path: "/log.js", render: proxyPlausibleJS }),
   createRoute({ path: "/articles.rss", render: renderRSS }),
   createRoute({ path: "/feed", render: renderRSS }),
-  createRoute({ path: "/archive", render: renderArchive }),
   createRoute({ path: "/notes/:slug", render: renderNote }),
   createRoute({ path: "/404", render: renderNotFound }),
   createRoute({ path: "/static/:file", render: renderStatic }),
 ];
 
 const respond = ({
-  cacheResponse = true,
+  cacheResponse = false,
   content,
   contentType = "text/html",
   response,

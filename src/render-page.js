@@ -56,8 +56,7 @@ const renderPage = (
     <body class="page-${pageID}">
       <nav id="header">
         <a href="/" id="logo">
-          <img src="/static/byline.jpg" alt="Headshot of Kent William Innholt" />
-          <h1>Field notes</h1>
+          <h1>code, design, heart</h1>
         </a>
         <span class="spacer" aria-hidden="true"></span>
         <!--<a href="/">Home</a>-->
