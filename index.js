@@ -158,7 +158,7 @@ class Note {
     // Current-year dates show without year, others show with year
     const publishedDate = new Date(published);
     const publishedString = `
-      ${publishedDate.toLocaleString("en-us", { month: "long" })} 
+      ${publishedDate.toLocaleString("en-us", { month: "short" })} 
       ${publishedDate.getDate()}, ${publishedDate.getFullYear()}
     `;
 

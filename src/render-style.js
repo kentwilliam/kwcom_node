@@ -65,6 +65,12 @@ const renderStyle = () => `
     overflow-y: scroll;
   }
 
+  @media (min-width: 600px) {
+    body {
+      font-size: 1.2rem;
+    }
+  }
+
   #content {
     grid-column-start: 4;
     grid-column-end: -4;
@@ -98,6 +104,8 @@ const renderStyle = () => `
     color: ${PALETTE.metadata};
     font-size: 0.95rem;
     align-items: center;
+    white-space: nowrap;
+    flex-wrap: wrap;
   }
 
 .metadata > * {
@@ -197,12 +205,8 @@ const renderStyle = () => `
     pre {
       border-radius: .3rem;
       margin: 2rem 0;
-      // max-width: 80rem;
-// border: 1px solid red;
-// max-width: 90vw;
-      min-width: 36rem;
       overflow: auto;
-      padding: 1.2rem 1.2rem 1.5rem;
+      padding: 0.8rem 1.2rem 1.3rem;
     }
 
     code {
