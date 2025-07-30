@@ -58,8 +58,6 @@ const renderPage = (
         <a href="/" id="logo">
           <h1>code, design, heart</h1>
         </a>
-        <span class="spacer" aria-hidden="true"></span>
-        <!--<a href="/">Home</a>-->
       </nav>
       <div id="content">
         ${content}

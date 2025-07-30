@@ -216,6 +216,16 @@ const renderNote = (response, request) => {
   });
 };
 
+const redirectArticle = (response, request) => {
+  const path = getBasePath(request.url);
+  const newPath = path.replace(/^\/articles/, "/notes");
+  if (path.length === newPath.length) {
+    return renderError(response, request);
+  }
+  response.writeHead(301, { Location: newPath });
+  response.end();
+};
+
 const renderNotFound = (response, request) =>
   respond({
     cacheResponse: false,
@@ -388,6 +398,7 @@ const ROUTES = [
   createRoute({ path: "/articles.rss", render: renderRSS }),
   createRoute({ path: "/feed", render: renderRSS }),
   createRoute({ path: "/notes/:slug", render: renderNote }),
+  createRoute({ path: "/articles/:slug", render: redirectArticle }),
   createRoute({ path: "/404", render: renderNotFound }),
   createRoute({ path: "/static/:file", render: renderStatic }),
 ];

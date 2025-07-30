@@ -60,7 +60,7 @@ const renderStyle = () => `
     grid-template-columns: minmax(2ch, 5vw) 1fr minmax(12em, 70ch) 1fr minmax(2ch, 5vw);
     grid-template-rows: 6rem 40px auto 70px;
     justify-items: stretch;
-    line-height: 1.8;
+    line-height: 1.6;
     margin: 0;
     overflow-y: scroll;
   }
@@ -81,7 +81,7 @@ const renderStyle = () => `
   }
 
   p, blockquote, pre, ol, ul, .metadata {
-    margin: 0 0 1.4rem;
+    margin: 0 0 1.7rem;
     padding: 0;
   }
 

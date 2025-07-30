@@ -5,7 +5,7 @@ updated: 2018-01-28 00:45:54
 
 ~
 
-A few weeks ago, I wrote about [recommitting to being a “habitual creator,”](http://kentwilliam.com/articles/getting-back-to-a-habit-of-curious-creation) i.e. someone who regularly adds something (hopefully) new and different to the world.
+A few weeks ago, I wrote about [recommitting to being a “habitual creator,”](/articles/getting-back-to-a-habit-of-curious-creation) i.e. someone who regularly adds something (hopefully) new and different to the world.
 
 As I mentioned in that post, the first experiment I’m exploring is simple:
 
