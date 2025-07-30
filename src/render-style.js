@@ -3,7 +3,7 @@
 const PALETTE = {
   backgroundColor: "#2b2a2a",
   metadata: "#999",
-  blockquoteForeground: "#5a5a5a",
+  blockquoteForeground: "#999",
   monoText: "#eee",
   monoBackground: "#444",
   linkText: "#ffad80",
