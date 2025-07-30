@@ -1,4 +1,4 @@
-title: Phountains: Photo Organization for People Who Want to Remain in Charge
+title: Phountains: Photo organization for people who want to remain in charge
 published: 2018-01-28 00:45:54
 created: 2018-01-28 00:33:55
 updated: 2018-01-28 00:45:54

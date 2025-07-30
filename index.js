@@ -96,13 +96,41 @@ const getAllNotes = (response, request) =>
     })
   );
 
-const renderHome = (response, request) =>
+const renderHome = (response, request) => {
+  const socials = [
+    ["Email", "mailto:kentwilliam@gmail.com", "kentwilliam@gmail.com"],
+    ["Threads", "https://www.threads.com/@kentwilliam", "@kentwilliam"],
+    ["X", "https://x.com/oerhoert", "@oerhoert"],
+    ["GitHub", "https://github.com/kentwilliam", "kentwilliam"],
+    ["CodePen", "https://codepen.io/kentwilliam", "kentwilliam"],
+  ];
+
+  const bio = `
+    <div id="bio">
+      <ul id="socials">
+        ${socials
+          .map(
+            ([label, href, handle]) => `
+              <li class="${label.toLowerCase()}">
+                <a href="${href}">
+                  <span>${label}</span>
+                  ${handle}
+                </a>
+              </li>
+            `
+          )
+          .join("")}
+      </ul>
+    </div>
+  `;
+
   getAllNotes(response).then((notes) => {
     respond({
       request,
       content: renderPage(
         "root",
-        `<nav id="sections">
+        `${bio}
+        <nav id="sections">
           ${renderNotes(notes)}
         </nav>`,
         "Home",
@@ -112,6 +140,7 @@ const renderHome = (response, request) =>
       response,
     });
   });
+};
 
 const renderNotes = (notes) => `
   <ol>

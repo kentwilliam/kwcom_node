@@ -174,6 +174,38 @@ const renderStyle = () => `
     margin-bottom: 0.2rem;
   }
 
+  #bio {
+    margin-bottom: 2.3rem;
+    padding-bottom: 3rem;
+  }
+
+    #bio ul {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    #bio li {
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    #bio li a {
+      display: flex;
+      flex-direction: column;
+      padding: 1ch 2ch;
+      background: rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+      #bio li a:hover {
+        background: rgba(255,255,255,0.1);
+      }
+      #bio li span {
+        color: ${PALETTE.text};
+margin-bottom: -0.3rem;
+      }
+
 
 /* Quotes */
 

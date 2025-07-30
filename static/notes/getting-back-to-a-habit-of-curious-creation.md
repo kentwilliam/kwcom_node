@@ -1,4 +1,4 @@
-title: Getting Back to a Habit of Curious Creation
+title: Getting back to a habit of curious creation
 published: 2017-12-30 05:18:02
 created: 2017-12-28 21:24:59
 updated: 2019-07-05 13:16:28

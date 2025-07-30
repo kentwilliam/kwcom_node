@@ -1,4 +1,4 @@
-title: Saving Time & Staying Sane? Pros & Cons of React.js
+title: Saving time & staying sane? Pros & cons of React.js
 published: 2014-07-21 23:01:09
 created: 2014-07-07 08:10:48
 updated: 2014-07-21 23:01:09
