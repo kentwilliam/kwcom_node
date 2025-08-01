@@ -1,7 +1,7 @@
 // @format
 
 const PALETTE = {
-  backgroundColor: "#2b2a2a",
+  backgroundColor: "#222",
   metadata: "#999",
   blockquoteForeground: "#999",
   monoText: "#eee",
@@ -120,7 +120,6 @@ const renderStyle = () => `
 
     .metadata .byline {
       border-radius: 50%;
-      height: 24px;
       margin-right: 0.8ch;
       display: flex;
       flex-shrink: 0;
@@ -178,33 +177,49 @@ const renderStyle = () => `
     margin-bottom: 2.3rem;
     padding-bottom: 3rem;
   }
+    #headshot {
+      float: right;
+      margin: 0 0 3ch 3ch;
+      border-radius: 33% 12px 33% 12px;
+      width: 140px;
+      height: 187px;
+    }
+      @media (min-width: 600px) {
+        #headshot {
+          width: 200px;
+          height: 267px;
+        }
+      }
 
-    #bio ul {
+    #socials {
       padding: 0;
-      margin: 0;
+      margin: 2.4rem 0 0;
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
     }
-    #bio li {
-      border-radius: 16px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    #bio li a {
-      display: flex;
-      flex-direction: column;
-      padding: 1ch 2ch;
-      background: rgba(255,255,255,0.05);
-      font-size: 0.9rem;
-    }
-      #bio li a:hover {
-        background: rgba(255,255,255,0.1);
+      #socials li {
+        overflow: hidden;
+        flex-shrink: 0;
       }
-      #bio li span {
-        color: ${PALETTE.text};
-margin-bottom: -0.3rem;
+      #socials li a {
+        display: flex;
+        flex-direction: column;
+        padding: 1ch 2ch;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.05);
+        box-shadow: inset 1px 1px 0 #444, inset -1px -1px 0 #333;
+        font-size: 0.9rem;
+        font-weight: bold;
       }
+        #socials li a:hover {
+          background: rgba(255,255,255,0.1);
+        }
+        #socials li span {
+          color: ${PALETTE.metadata};
+          margin-bottom: -0.3rem;
+          font-weight: normal;
+        }
 
 
 /* Quotes */

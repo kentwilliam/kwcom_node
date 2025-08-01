@@ -107,6 +107,12 @@ const renderHome = (response, request) => {
 
   const bio = `
     <div id="bio">
+      <img id="headshot" src="/static/headshot-big.jpg" width=200 height=267 alt="Photo of Kent William Innholt">
+      <p>Hi there! 👋 I'm Kent William.</p>
+      <p>I'm a design engineer who loves building things that matter.</p>
+      <p>At Meta, I started and led a data table framework that's now powering over 12,000 UIs across the company.</p>
+      <p>I've also worked on dev tools, no-code mobile platforms, ad blocker defense, games, and VR UI systems.</p>
+      <p>Currently, I'm in builder mode, validating ideas and exploring early-stage opportunities.</p>
       <ul id="socials">
         ${socials
           .map(
@@ -131,6 +137,7 @@ const renderHome = (response, request) => {
         "root",
         `${bio}
         <nav id="sections">
+          <h2>Posts</h2>
           ${renderNotes(notes)}
         </nav>`,
         "Home",
@@ -225,7 +232,7 @@ const renderNote = (response, request) => {
       `
         <h1>${note.title}</h1>
         <div class="metadata">
-          <span><img src="/static/byline.jpg" class="byline"> Kent William Innholt</span>
+          <span><img src="/static/byline.jpg" class="byline" height=32 width=32> Kent William Innholt</span>
           <time datetime=${note.published}>${note.publishedString}</time>
           <span>${note.readTimeInMinutes} min read</span>
         </div>
