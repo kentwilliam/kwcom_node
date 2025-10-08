@@ -4,7 +4,7 @@ import * as marked from "marked";
 import memory_cache from "memory-cache";
 import path from "path";
 import renderPage from "./render-page.js";
-import config from "./config.js";
+import CONFIG from "./config.js";
 
 // Alphas, numbers, slash, and dash, plus an optional extension
 const VALID_ROUTE =
@@ -339,14 +339,14 @@ const renderRSS = (response, request) =>
   getAllNotes(response).then((notes) => {
     const host =
       request.connection.encrypted == null
-        ? config.server.localhost
+        ? CONFIG.server.localhost
         : "https://" + request.connection.host;
 
     const pageContent = `<?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
         <channel>
-          <title>${config.site.title}</title>
-          <description>${config.site.description}</description>
+          <title>${CONFIG.site.title}</title>
+          <description>${CONFIG.site.description}</description>
           <link>${host}/feed</link>
           <copyright>${new Date().getFullYear()} kentwilliam.com All rights reserved</copyright>
           <ttl>1800</ttl>
@@ -448,7 +448,7 @@ const respond = ({
     memory_cache.put(
       request.url,
       { content, contentType, headers },
-      config.cache.timeout
+      CONFIG.cache.timeout
     );
   }
 

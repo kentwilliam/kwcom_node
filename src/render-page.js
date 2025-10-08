@@ -1,7 +1,7 @@
 // @format
 
-const renderStyle = require("./render-style");
-const siteConfig = require("./config");
+import renderStyle from "./render-style.js";
+import CONFIG from "./config.js";
 
 const renderPage = (
   pageID,
@@ -17,7 +17,7 @@ const renderPage = (
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <title>${siteConfig.title}</title>
+      <title>${CONFIG.site.title}</title>
       <style>
         ${renderStyle()}
       </style>
@@ -43,7 +43,7 @@ const renderPage = (
       <meta property="og:image" content="https://kentwilliam.com/static/byline-large.png" />
       <meta property="og:image:secure_url" content="https://kentwilliam.com/static/byline-large.png" />
       <meta property="og:description" content="${contentSummary}" />
-      <meta property="og:site_name" content="${siteConfig.title}" />
+      <meta property="og:site_name" content="${CONFIG.site.title}" />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@oerhoert" />
@@ -74,4 +74,4 @@ const renderPage = (
   </html>
 `;
 
-module.exports = renderPage;
+export default renderPage;

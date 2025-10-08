@@ -345,4 +345,4 @@ const renderStyle = () => `
   }
 `;
 
-module.exports = renderStyle;
+export default renderStyle;
