@@ -1,7 +1,7 @@
 // @format
 
 const renderStyle = require("./render-style");
-const siteConfig = require("./site-config");
+const siteConfig = require("./config");
 
 const renderPage = (
   pageID,

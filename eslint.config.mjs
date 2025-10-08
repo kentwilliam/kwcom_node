@@ -9,5 +9,10 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.node },
   },
-  { files: ["**/*.js"], languageOptions: { sourceType: "commonjs" } },
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      sourceType: "module",
+    },
+  },
 ]);
