@@ -435,7 +435,7 @@ const ROUTES = [
 ];
 
 const respond = ({
-  cacheResponse = false,
+  cacheResponse = true,
   content,
   contentType = "text/html",
   response,
