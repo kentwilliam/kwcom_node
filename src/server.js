@@ -345,10 +345,11 @@ const createRoute = (config) => {
 
 const renderRSS = (response, request) =>
   getAllNotes(response).then((notes) => {
+    // Hardcode domain to prevent Host header injection attacks
     const host =
       request.connection.encrypted == null
         ? CONFIG.server.localhost
-        : "https://" + request.connection.host;
+        : "https://kentwilliam.com";
 
     const pageContent = `<?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
