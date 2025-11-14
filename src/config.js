@@ -8,7 +8,7 @@ const CONFIG = {
     title: "code, design, heart",
   },
   cache: {
-    timeout: 10 * 1000,
+    timeout: 5 * 60 * 1000, // 5 minutes
   },
   server: {
     port: PORT,
