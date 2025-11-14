@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "marked": "^4.2.12",
+    "marked": "^17.0.0",
     "memory-cache": "^0.2.0"
   },
   "devDependencies": {
