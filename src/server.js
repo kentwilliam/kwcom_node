@@ -1,10 +1,18 @@
 import fs from "fs";
 import stream from "stream";
 import * as marked from "marked";
-import memory_cache from "memory-cache";
+import { LRUCache } from "lru-cache";
 import path from "path";
 import renderPage from "./render-page.js";
 import CONFIG from "./config.js";
+
+// Create bounded cache to prevent memory exhaustion attacks
+const cache = new LRUCache({
+  max: 500, // Maximum 500 cached responses
+  maxSize: 50_000_000, // Maximum 50MB total cache size
+  sizeCalculation: (value) => value.content.length,
+  ttl: CONFIG.cache.timeout,
+});
 
 // Alphas, numbers, slash, and dash, plus an optional extension
 const VALID_ROUTE =
@@ -33,15 +41,15 @@ const server = (request, response) => {
     return;
   }
 
-  const { content, contentType, headers } = memory_cache.get(request.url) ?? {};
-  if (content != null) {
-    print("returing cached response", content.length);
+  const cached = cache.get(request.url);
+  if (cached != null) {
+    print("returing cached response", cached.content.length);
     respond({
       response,
       request,
-      content,
-      contentType,
-      headers,
+      content: cached.content,
+      contentType: cached.contentType,
+      headers: cached.headers,
     });
     return;
   } else {
@@ -445,11 +453,7 @@ const respond = ({
 }) => {
   if (cacheResponse) {
     print("storing to cache");
-    memory_cache.put(
-      request.url,
-      { content, contentType, headers },
-      CONFIG.cache.timeout
-    );
+    cache.set(request.url, { content, contentType, headers });
   }
 
   for (const [header, value] of headers) {
