@@ -18,7 +18,8 @@ const FONTS = {
   monospace: `sohne-mono, serif`,
 };
 
-const renderStyle = () => `
+// Pre-compute CSS string once instead of on every render
+const RENDERED_STYLE = `
 
 @font-face {
   font-family: 'sohne';
@@ -338,11 +339,11 @@ const renderStyle = () => `
   }
   
   #content p > img {
-    max-width: 100vw; 
+    max-width: 100vw;
     max-height: 32rem;
     margin-left: 50%;
     transform: translateX(-50%);
   }
 `;
 
-export default renderStyle;
+export default RENDERED_STYLE;

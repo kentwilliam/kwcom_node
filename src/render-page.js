@@ -1,6 +1,6 @@
 // @format
 
-import renderStyle from "./render-style.js";
+import RENDERED_STYLE from "./render-style.js";
 import CONFIG from "./config.js";
 
 const renderPage = (
@@ -19,7 +19,7 @@ const renderPage = (
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <title>${CONFIG.site.title}</title>
       <style>
-        ${renderStyle()}
+        ${RENDERED_STYLE}
       </style>
       <script defer async src="/static/client.js"></script>
       <script defer src="/log.js"></script>
