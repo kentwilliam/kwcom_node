@@ -6,9 +6,12 @@ import path from "path";
 import renderPage from "./render-page.js";
 import CONFIG from "./config.js";
 
-// Alphas, numbers, slash, and dash, plus an optional extension
-const VALID_ROUTE =
-  /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?(\?[a-zA-Z\d/-]+)?(#[a-zA-Z\d/-]+)?$/;
+const VALID_PATH = /^[a-zA-Z\d/-]+(\.[a-z0-9]{2,10})?/;
+const VALID_QUERY = /(\?[a-zA-Z\d/\-_=&.%+]*)?/;
+const VALID_HASH = /(\#[a-zA-Z\d/-]+)?$/;
+const VALID_ROUTE = new RegExp(
+  VALID_PATH.source + VALID_QUERY.source + VALID_HASH.source
+);
 
 const server = (request, response) => {
   print("Request: ", request.url);
