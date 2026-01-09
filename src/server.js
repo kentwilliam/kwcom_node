@@ -13,6 +13,8 @@ const VALID_ROUTE = new RegExp(
   VALID_PATH.source + VALID_QUERY.source + VALID_HASH.source
 );
 
+export const isValidRoute = (url) => VALID_ROUTE.test(url);
+
 const server = (request, response) => {
   print("Request: ", request.url);
 
@@ -29,8 +31,7 @@ const server = (request, response) => {
 
   response.setHeader("Cache-control", "public, max-age=300");
 
-  const isValidRoute = VALID_ROUTE.test(request.url);
-  if (!isValidRoute) {
+  if (!isValidRoute(request.url)) {
     print("Invalid route");
     renderNotFound(response, request);
     return;
